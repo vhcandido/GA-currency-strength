@@ -8,10 +8,7 @@ library(TTR)
 library(parallel)
 suppressMessages(library(quantmod))
 
-#source('SIT.R')
-
 source('input.R')
-
 source('Strategy.R')
 
 
@@ -65,6 +62,11 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	if(is.null(pairs)){		
 		pairs <- ev$pairsTotal 
 	}
+
+	# Cleaning file
+	if(!is.null(logFile)){		
+		cat(NULL, file = logFile)
+	}
 	
 	### Set some global variables ##
 	if(enable.output) {cat('Setting global variables...\n')}
@@ -87,11 +89,10 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	####### Read data ############
 	cat('Reading data windows\n')
 	timeFull <- time(ev$quotesTotal[[1]])
-	dateInterval <- sapply(strsplit(dataInt, '::'), function(x) strptime(x, '%Y-%m-%d'))
-	firstTime <- which(timeFull >= dateInterval[1])[1]
-	lastTime <- which(timeFull >= as.chron(dateInterval[2]))[1]
+	timeSubset <- time(ev$quotesTotal[[1]][dataInt])
+	firstTime <- which(timeFull == timeSubset[1])
+	lastTime <- which(timeFull == tail(timeSubset, 1))
 	if(is.na(lastTime)){lastTime=length(timeFull)}
-	
 	loadQuotes <- function(tt){
 		ev$quotes <- lapply(ev$pairs, function(p){ev$quotesTotal[[p]][(tt-windowSize+1):tt,]})
 		names( ev$quotes ) <- ev$pairs
@@ -119,13 +120,12 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	##### main looping ############
 	if(enable.output) {cat('Starting the main loop!\n\n')}
 	tt <- firstTime
-	currentTime = substr(dataInt,1,10)
-	while(currentTime < substr(dataInt,13,22)){
+	while(tt <= lastTime){
 	#for(tt in (firstTime):lastTime){
 		
 		## Prepare Data and time ##
 		loadQuotes(tt)
-		currentTime = timeFull[[tt]]
+		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
 		###########################
