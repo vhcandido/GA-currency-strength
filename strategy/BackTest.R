@@ -2,10 +2,11 @@ rm(list=ls(all=TRUE))
 
 ###############################################
 library(chron)
+suppressMessages(library(zoo))
 library(xts)
 library(TTR)
 library(parallel)
-library(quantmod)
+suppressMessages(library(quantmod))
 
 source('SIT.R')
 
