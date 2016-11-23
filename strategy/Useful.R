@@ -210,3 +210,65 @@ is_valid_U <- function(pair, t) {
 	return(identical(M1[[t,pair]],M1[[t+2, pair]],M1[[t+2,pair]]))
 }
 
+# Functions imported from SIT (Systematic Investor Toolkit)
+# https://github.com/systematicinvestor/SIT
+# Credits on this implementation belong to the righful creator,
+# we decided to put them here only because importing SIT demands
+# more resources than we wanted and needed.
+len <- function(x) {length(x)}
+ifna <- function(x, y) {
+	return(iif(is.na(x) | is.nan(x) | is.infinite(x), y, x))
+}
+
+iif <- function(cond, truepart, falsepart) {
+	if(len(cond) == 1) { if(cond) truepart else falsepart }
+	else {
+		if(length(falsepart) == 1) {
+			temp = falsepart
+			falsepart = cond
+			falsepart[] = temp
+		}
+		if(length(truepart) == 1)
+			falsepart[cond] = truepart
+		else {
+			cond = ifna(cond,F)
+			if(requireNamespace('xts', quietly = T) && xts::is.xts(truepart))
+				falsepart[cond] = coredata(truepart)[cond]
+			else
+				falsepart[cond] = truepart[cond]
+		}
+		falsepart
+	}
+}
+
+cross <- function( array1, array2, eq=F ) {
+	iif(eq, array1 >= array2, array1 > array2) & iif(len(array1) > 1, mlag(array1), array1) < iif(len(array2) > 1, mlag(array2), array2)
+}
+cross.up <- function( array1, array2 ) { cross( array1, array2 ) }
+cross.dn <- function( array1, array2 ) { cross( array2, array1 ) }
+cross.up.eq <- function( array1, array2 ) { cross( array1, array2, T ) }
+cross.dn.eq <- function( array1, array2 ) { cross( array2, array1, T ) }
+
+mlag <- function(m, nlag = 1) {
+	if( is.null(dim(m)) ) {
+		n = len(m)
+		if(nlag > 0) {
+			m[(nlag+1):n] = m[1:(n-nlag)]
+			m[1:nlag] = NA
+		} else if(nlag < 0) {
+			m[1:(n+nlag)] = m[(1-nlag):n]
+			m[(n+nlag+1):n] = NA
+		}
+	} else {
+		n = nrow(m)
+		if(nlag > 0) {
+			m[(nlag+1):n,] = m[1:(n-nlag),]
+			m[1:nlag,] = NA
+		} else if(nlag < 0) {
+			m[1:(n+nlag),] = m[(1-nlag):n,]
+			m[(n+nlag+1):n,] = NA
+		}
+	}
+	return(m);
+}
+
