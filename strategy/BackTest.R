@@ -62,6 +62,11 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	if(is.null(pairs)){		
 		pairs <- ev$pairsTotal 
 	}
+
+	# Cleaning file
+	if(!is.null(logFile)){		
+		cat(NULL, file = logFile)
+	}
 	
 	### Set some global variables ##
 	ev$pairs <- pairs
