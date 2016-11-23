@@ -13,9 +13,6 @@ source('input.R')
 
 source('Strategy.R')
 
-source('input.R')
-
-
 
 ########### Global Environment ################
 ev <- new.env()
@@ -59,7 +56,7 @@ ev$quotesTotal <- load_data(ev$pairsTotal,dates='')
 backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02', 
 				pairs=NULL, spread=NULL, windowSize=200, 
 				accBalance=250, orderRisk=0.01, maxTotalRisk=0.06,
-				logFile=NULL){
+				logFile=NULL, enable.output=T){
 	
 	### check if exists pairs ######
 	if(is.null(pairs)){		
@@ -211,12 +208,14 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 		
 		####### Print ##############
 		balanceTS[tt] = accBalance
-		cat('\n\n')
-		print(currentTimeStr)
-		cat('Number of Open Orders: ', nrow(openOrders), '%\n', sep='')
-		cat('Exposure: ', round(100*(exposure(openOrders)/accBalance),2), '%\n', sep='')
-		cat('Balance: $', accBalance, '\n', sep='')
-		##print(ordersReport)
+		if(enable.output) {
+			cat('\n\n')
+			print(currentTimeStr)
+			cat('Number of Open Orders: ', nrow(openOrders), '%\n', sep='')
+			cat('Exposure: ', round(100*(exposure(openOrders)/accBalance),2), '%\n', sep='')
+			cat('Balance: $', accBalance, '\n', sep='')
+			##print(ordersReport)
+		}
 		flush.console()
 		############################
 		
