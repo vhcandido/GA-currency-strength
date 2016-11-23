@@ -3,7 +3,7 @@ fun <- function(d) as.chron(strptime(d, "%Y-%m-%d %H:%M:%S"))
 fun2 <- function(d) as.chron(strptime(d, "%Y.%m.%d %H:%M:%S"))
 
 # Read CSV file
-read_file <- function(pair_name, dates='', path='../../currency-strength/data/') {
+read_file <- function(pair_name, dates='', path='../data/') {
 	filename <- paste(path, pair_name, '.csv', sep='')
 		
 	data <- try(read.zoo( file=filename, header=T, FUN=fun, sep=','), silent = TRUE)
@@ -17,7 +17,7 @@ read_file <- function(pair_name, dates='', path='../../currency-strength/data/')
 }
 
 # Load currency pair data and build a list with it
-load_data <- function(pairs, dates='', path='../../currency-strength/data/') {
+load_data <- function(pairs, dates='', path='../data/') {
 	quotes <- lapply(pairs, read_file, dates, path)
 	names(quotes) <- pairs
 	

@@ -48,7 +48,9 @@ ev$spreadTotal <- c(
 					)
 names(ev$spreadTotal) <- ev$pairsTotal
 
-ev$quotesTotal <- load_data(ev$pairsTotal,dates='') 
+ev$quotesTotal <- load_data(ev$pairsTotal,
+														dates='',
+														path='../../currency-strength/data/') 
 	
 ###############################################
 
