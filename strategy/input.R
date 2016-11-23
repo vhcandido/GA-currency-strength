@@ -27,9 +27,9 @@ load_data <- function(pairs, dates='', path='../data/') {
 	has_equal_times <- sapply(times[-1], function(i) identical(i, times[[1]]))
 	if(!all(has_equal_times)) {
 		# Get the intersection of these dates
-		common_times <- Reduce(intersect, lapply(times, as.character))
+		common_times <- Reduce(intersect, times)
 		# Slice the intersection of each pair
-		quotes <- lapply(quotes, function(data) data[as.POSIXct(common_times)])
+		quotes <- lapply(quotes, function(data) data[common_times])
 	}
 	return(quotes)
 }

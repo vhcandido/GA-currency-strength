@@ -1,14 +1,14 @@
 rm(list=ls(all=TRUE))
 
 ###############################################
-library(chron)
 suppressMessages(library(zoo))
 library(xts)
+library(chron)
 library(TTR)
 library(parallel)
 suppressMessages(library(quantmod))
 
-source('SIT.R')
+#source('SIT.R')
 
 source('input.R')
 
@@ -48,8 +48,8 @@ ev$spreadTotal <- c(
 					)
 names(ev$spreadTotal) <- ev$pairsTotal
 
+cat("Loading data...\n")
 ev$quotesTotal <- load_data(ev$pairsTotal,
-														dates='',
 														path='../../currency-strength/data/') 
 	
 ###############################################
@@ -67,6 +67,7 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	}
 	
 	### Set some global variables ##
+	if(enable.output) {cat('Setting global variables...\n')}
 	ev$pairs <- pairs
 	ev$currencies <- sort( unique( unlist( lapply(ev$pairs, function(p) c(substr(p,1,3),substr(p,4,6)))) ) )
 	ev$windowSize <- windowSize
@@ -84,9 +85,11 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	ev$spread <- spread
 	
 	####### Read data ############
+	cat('Reading data windows\n')
 	timeFull <- time(ev$quotesTotal[[1]])
-	firstTime <- which(timeFull >= substr(dataInt,1,10))[1]
-	lastTime <- which(timeFull >= substr(dataInt,13,22))[1]
+	dateInterval <- sapply(strsplit(dataInt, '::'), function(x) strptime(x, '%Y-%m-%d'))
+	firstTime <- which(timeFull >= dateInterval[1])[1]
+	lastTime <- which(timeFull >= as.chron(dateInterval[2]))[1]
 	if(is.na(lastTime)){lastTime=length(timeFull)}
 	
 	loadQuotes <- function(tt){
@@ -99,6 +102,7 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 
 
 	###### initialize arrays ######
+	if(enable.output) {cat('Initializing matrixes for order management...\n')}
 	openOrdersColumns = c('Id', 'Pair', 'Type', 'LotSize', 'EntryTime', 'EntryPrice', 'TP', 'SL', 'CashRisk')
 	openOrders = matrix('a',nrow=0,ncol=length(openOrdersColumns))
 	colnames(openOrders) = openOrdersColumns
@@ -113,6 +117,7 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 
 
 	##### main looping ############
+	if(enable.output) {cat('Starting the main loop!\n\n')}
 	tt <- firstTime
 	currentTime = substr(dataInt,1,10)
 	while(currentTime < substr(dataInt,13,22)){
@@ -218,8 +223,8 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 			cat('Exposure: ', round(100*(exposure(openOrders)/accBalance),2), '%\n', sep='')
 			cat('Balance: $', accBalance, '\n', sep='')
 			##print(ordersReport)
+			flush.console()
 		}
-		flush.console()
 		############################
 		
 		tt=tt+1
