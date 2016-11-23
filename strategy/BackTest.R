@@ -8,10 +8,7 @@ library(TTR)
 library(parallel)
 suppressMessages(library(quantmod))
 
-source('SIT.R')
-
 source('input.R')
-
 source('Strategy.R')
 
 
@@ -85,10 +82,10 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	
 	####### Read data ############
 	timeFull <- time(ev$quotesTotal[[1]])
-	firstTime <- which(timeFull >= substr(dataInt,1,10))[1]
-	lastTime <- which(timeFull >= substr(dataInt,13,22))[1]
+	timeSubset <- time(ev$quotesTotal[[1]][dataInt])
+	firstTime <- which(timeFull == timeSubset[1])
+	lastTime <- which(timeFull == tail(timeSubset, 1))
 	if(is.na(lastTime)){lastTime=length(timeFull)}
-	
 	loadQuotes <- function(tt){
 		ev$quotes <- lapply(ev$pairs, function(p){ev$quotesTotal[[p]][(tt-windowSize+1):tt,]})
 		names( ev$quotes ) <- ev$pairs
@@ -114,13 +111,12 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 
 	##### main looping ############
 	tt <- firstTime
-	currentTime = substr(dataInt,1,10)
-	while(currentTime < substr(dataInt,13,22)){
+	while(tt <= lastTime){
 	#for(tt in (firstTime):lastTime){
 		
 		## Prepare Data and time ##
 		loadQuotes(tt)
-		currentTime = timeFull[[tt]]
+		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
 		###########################
@@ -218,8 +214,8 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 			cat('Exposure: ', round(100*(exposure(openOrders)/accBalance),2), '%\n', sep='')
 			cat('Balance: $', accBalance, '\n', sep='')
 			##print(ordersReport)
+			flush.console()
 		}
-		flush.console()
 		############################
 		
 		tt=tt+1

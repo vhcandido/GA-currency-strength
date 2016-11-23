@@ -1,6 +1,6 @@
 # Convert string into a Chronological object (chron)
-fun <- function(d) as.chron(strptime(d, "%Y-%m-%d %H:%M:%S"))
-fun2 <- function(d) as.chron(strptime(d, "%Y.%m.%d %H:%M:%S"))
+fun <- function(d) as.POSIXct(strptime(d, "%Y-%m-%d %H:%M:%S"))
+fun2 <- function(d) as.POSIXct(strptime(d, "%Y.%m.%d %H:%M:%S"))
 
 # Read CSV file
 read_file <- function(pair_name, dates='', path='../data/') {
@@ -27,9 +27,9 @@ load_data <- function(pairs, dates='', path='../data/') {
 	has_equal_times <- sapply(times[-1], function(i) identical(i, times[[1]]))
 	if(!all(has_equal_times)) {
 		# Get the intersection of these dates
-		common_times <- Reduce(intersect, lapply(times, as.character))
+		common_times <- as.POSIXct(Reduce(intersect, times), origin='1970-01-01')
 		# Slice the intersection of each pair
-		quotes <- lapply(quotes, function(data) data[as.POSIXct(common_times)])
+		quotes <- lapply(quotes, function(data) data[common_times])
 	}
 	return(quotes)
 }
