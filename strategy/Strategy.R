@@ -230,7 +230,7 @@ S.2 <- function(openOrders, accBalance, spread, orderRisk=0.01, maxTotalRisk=0.0
 		sink(logFile, append = TRUE)
 		cat('\n\n------------------------------------\n  ')
 		cat(currentTime)
-		cat('\nLog of Strategy: S.1\n')
+		cat('\nLog of Strategy: S.2\n')
 		cat('Select Pairs   : SP.2StrMat\n');
 		cat('Filters        : SMA, StochRSI\n');
 		cat('Risk Manager   : RM.1\n');
