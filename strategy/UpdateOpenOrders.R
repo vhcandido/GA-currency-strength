@@ -77,7 +77,7 @@ upSL_02 <- function(openOrders, ordersModify, pips_until_SL){
 				last_bottom <- last_U_turn_idx(p, last_top+2, low=TRUE)
 				last_bottom_price <- min( ev$quotes[[p]][last_bottom:nn,'Low'] ) ## diferent of upSL_01
 				
-				new_SL <- last_bottom_price - pips_until_SL/ev$pip_rate[[p]] 
+				new_SL <- last_bottom_price - pips_until_SL[[p]]/ev$pip_rate[[p]]
 				if( SL+1/ev$pip_rate[[p]] < new_SL ){                          ## diferent of upSL_01
 					ordersModify <- rbind(ordersModify, c(Id,TP,new_SL))
 				}
@@ -89,7 +89,7 @@ upSL_02 <- function(openOrders, ordersModify, pips_until_SL){
 				last_top <- last_U_turn_idx(p, last_bottom+2, low=FALSE)				
 				last_top_price <- max( ev$quotes[[p]][last_top:nn,'High'] ) ## diferent of upSL_01
 				
-				new_SL <- last_top_price + pips_until_SL/ev$pip_rate[[p]] 
+				new_SL <- last_top_price + pips_until_SL[[p]]/ev$pip_rate[[p]]
 				if( SL-1/ev$pip_rate[[p]] > new_SL ){                       ## diferent of upSL_01
 					ordersModify <- rbind(ordersModify, c(Id,TP,new_SL))
 				}

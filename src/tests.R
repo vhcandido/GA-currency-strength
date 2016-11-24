@@ -18,6 +18,12 @@ genes <- as.numeric(unlist(strsplit(chromo, ',')))
 risk <- genes[c(1,2)]/100
 genes <- genes[-c(1,2)] # remove from genes
 
+# Taking the next 21 -> UOO.1.pips_until_SL
+UOO.1.pips_until_SL <- as.list(genes[c(1:21)])
+names(UOO.1.pips_until_SL) <- ev$pairsTotal
+par <- append(par, list(UOO.1.pips_until_SL))
+genes <- genes[-c(1:21)] # remove from genes
+
 par.names = c(
 	'UOO.1.pips_until_SL',# = 15,
 	'SP.2StrMat.n_sma',# = 72,
