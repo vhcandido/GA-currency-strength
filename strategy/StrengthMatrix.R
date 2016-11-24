@@ -16,10 +16,12 @@ compute_m1 <- function(quotes, n_ma=72) {
 ######################################
 SM.Sma <- function(n_sma=72) {
 	# Matrix with last 'n_sma' closes of all pairs
+	# cl is a xts with 21 columns of close values
 	cl <- get_pairs_column_tail(colname='Close', n=n_sma)
 	## SMA(n_sma)
+	# sma is a named vector with each sma value for this point
 	sma <- colMeans(cl)
-	## m1 vec
+	## m1 matrix
 	m1 = matrix(ifelse(cl[n_sma,] > sma, 1, -1), nrow=1)
 	colnames(m1) = colnames(cl)
 	
@@ -136,6 +138,8 @@ compute_m2 <- function(quotes, M1, n_ma=72) {
 ### Compute Matrix 2 for last time
 ##########################################################
 SM.Fibo <- function(quotes, n_ma=72) {	
+	# Add pair name or n_ma as parameter to func_sma
+	# With pair name we can also parametrize the moving average!
 	func_sma = function(x){SMA(x, n_ma);} 
 	M1 <- func_close_ind_mat(quotes, func_sma)
 	retrieve_m( tail(compute_m2(quotes,M1, n_ma), 1 ) )
