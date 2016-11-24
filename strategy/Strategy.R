@@ -37,12 +37,12 @@ S.0 <- function(openOrders, accBalance, spread, orderRisk=0.01, maxTotalRisk=0.0
 	par=list(), logFile=NULL, currentTime=as.POSIXlt(Sys.time(), "Europe/Paris") ){
 	
 	###### Default parameters ################
-	if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
-	if(is.null(par$F.Sar.acc)){ par$F.Sar.acc=0.02; }
-	if(is.null(par$F.Sar.max_acc)){ par$F.Sar.max_acc=0.2; }
-	if(is.null(par$F.Sar.n_sar)){ par$F.Sar.n_sar=2; }
-	if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
-	if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=1.0; }
+	#if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
+	#if(is.null(par$F.Sar.acc)){ par$F.Sar.acc=0.02; }
+	#if(is.null(par$F.Sar.max_acc)){ par$F.Sar.max_acc=0.2; }
+	#if(is.null(par$F.Sar.n_sar)){ par$F.Sar.n_sar=2; }
+	#if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
+	#if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=1.0; }
 	
 	######## Update Open Orders ###############
 	ordersModify = UOO.1(openOrders, par=list(pips_until_SL=par$UOO.1.pips_until_SL))
