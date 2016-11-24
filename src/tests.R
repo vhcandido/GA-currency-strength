@@ -1,6 +1,7 @@
 setwd("../strategy")
 
 source('BackTest.R')
+cat('Ready to run\n\n')
 #source('Plot.R')
 str <- "1,6,15,72,6,4,8,5,14,5,5,3,15,3"
 str.vector <- as.numeric(unlist(strsplit(str, ',')))

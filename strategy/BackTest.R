@@ -87,7 +87,7 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	ev$spread <- spread
 	
 	####### Read data ############
-	cat('Reading data windows\n')
+	if(enable.output) {cat('Reading data windows\n')}
 	timeFull <- time(ev$quotesTotal[[1]])
 	timeSubset <- time(ev$quotesTotal[[1]][dataInt])
 	firstTime <- which(timeFull == timeSubset[1])
@@ -121,21 +121,12 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	if(enable.output) {cat('Starting the main loop!\n\n')}
 	tt <- firstTime
 	while(tt <= lastTime){
-	#for(tt in (firstTime):lastTime){
-		
 		## Prepare Data and time ##
 		loadQuotes(tt)
 		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
 		###########################
-		
-		# cat('\n----------------------------\n')
-		# cat(format(timeFull[[tt]], "%d/%m/%Y %H:%M"),'\n')
-		# cat('Number of Open Orders: ', nrow(openOrders), '\n')
-		# cat('Balance: $', accBalance, '\n')
-		# cat('Exposure: ', exposure()/accBalance, '%\n')
-		# cat('----------------------------\n')
 		
 		#### Send New Orders ######
 		if(nrow(newOrders) > 0){
