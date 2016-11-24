@@ -37,12 +37,12 @@ S.0 <- function(openOrders, accBalance, spread, orderRisk=0.01, maxTotalRisk=0.0
 	par=list(), logFile=NULL, currentTime=as.POSIXlt(Sys.time(), "Europe/Paris") ){
 	
 	###### Default parameters ################
-	#if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
-	#if(is.null(par$F.Sar.acc)){ par$F.Sar.acc=0.02; }
-	#if(is.null(par$F.Sar.max_acc)){ par$F.Sar.max_acc=0.2; }
-	#if(is.null(par$F.Sar.n_sar)){ par$F.Sar.n_sar=2; }
-	#if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
-	#if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=1.0; }
+	if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
+	if(is.null(par$F.Sar.acc)){ par$F.Sar.acc=0.02; }
+	if(is.null(par$F.Sar.max_acc)){ par$F.Sar.max_acc=0.2; }
+	if(is.null(par$F.Sar.n_sar)){ par$F.Sar.n_sar=2; }
+	if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
+	if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=1.0; }
 	
 	######## Update Open Orders ###############
 	ordersModify = UOO.1(openOrders, par=list(pips_until_SL=par$UOO.1.pips_until_SL))
@@ -184,18 +184,18 @@ S.2 <- function(openOrders, accBalance, spread, orderRisk=0.01, maxTotalRisk=0.0
 	par=list(), logFile=NULL, currentTime=as.POSIXlt(Sys.time(), "Europe/Paris") ){
 	
 	###### Default parameters ################
-	if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
-	if(is.null(par$SP.2StrMat.n_sma)){ par$SP.2StrMat.n_sma=72; }
-	if(is.null(par$SP.2StrMat.min_diff)){ par$SP.2StrMat.min_diff=6; }
-	if(is.null(par$SP.2StrMat.min_strength)){ par$SP.2StrMat.min_strength=4; }
-	if(is.null(par$F.Sma.n_sma)){ par$F.Sma.n_sma=8; }
-	if(is.null(par$F.Sma.n_pips)){ par$F.Sma.n_pips=5; }
-	if(is.null(par$F.StochRsi.nrsi)){ par$F.StochRsi.nrsi=14; }
-	if(is.null(par$F.StochRsi.nFastK)){ par$F.StochRsi.nFastK=5; }
-	if(is.null(par$F.StochRsi.nFastD)){ par$F.StochRsi.nFastD=5; }
-	if(is.null(par$F.StochRsi.nSlowD)){ par$F.StochRsi.nSlowD=3; }
-	if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
-	if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=3; }
+	#if(is.null(par$UOO.1.pips_until_SL)){ par$UOO.1.pips_until_SL=15;}
+	#if(is.null(par$SP.2StrMat.n_sma)){ par$SP.2StrMat.n_sma=72; }
+	#if(is.null(par$SP.2StrMat.min_diff)){ par$SP.2StrMat.min_diff=6; }
+	#if(is.null(par$SP.2StrMat.min_strength)){ par$SP.2StrMat.min_strength=4; }
+	#if(is.null(par$F.Sma.n_sma)){ par$F.Sma.n_sma=8; }
+	#if(is.null(par$F.Sma.n_pips)){ par$F.Sma.n_pips=5; }
+	#if(is.null(par$F.StochRsi.nrsi)){ par$F.StochRsi.nrsi=14; }
+	#if(is.null(par$F.StochRsi.nFastK)){ par$F.StochRsi.nFastK=5; }
+	#if(is.null(par$F.StochRsi.nFastD)){ par$F.StochRsi.nFastD=5; }
+	#if(is.null(par$F.StochRsi.nSlowD)){ par$F.StochRsi.nSlowD=3; }
+	#if(is.null(par$RM.1.n_pips_to_Uturn)){ par$RM.1.n_pips_to_Uturn=15; }
+	#if(is.null(par$RM.1.tp_by_sl)){ par$RM.1.tp_by_sl=3; }
 	
 	######## Update Open Orders ###############
 	ordersModify = UOO.1(openOrders, par=list(pips_until_SL=par$UOO.1.pips_until_SL))
