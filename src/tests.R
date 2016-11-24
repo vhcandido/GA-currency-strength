@@ -3,11 +3,20 @@ setwd("../strategy")
 source('BackTest.R')
 cat('Ready to run\n\n')
 #source('Plot.R')
-str <- "1,6,15,72,6,4,8,5,14,5,5,3,15,3"
-str.vector <- as.numeric(unlist(strsplit(str, ',')))
 
-risk <- str.vector[c(1,2)]/100
-str.vector <- str.vector[-c(1,2)]
+# Chromosome received from GA
+chromo <- paste("1,6",
+								paste(rep(15,21), collapse = ','),
+								"72,6,4,8,5,14,5,5,3,15,3",
+								sep=',')
+par <- list()
+
+# Chromosome splitted into its genes
+genes <- as.numeric(unlist(strsplit(chromo, ',')))
+
+# Taking the first 2 -> orderRisk and maxTotalRisk
+risk <- genes[c(1,2)]/100
+genes <- genes[-c(1,2)] # remove from genes
 
 par.names = c(
 	'UOO.1.pips_until_SL',# = 15,
@@ -23,7 +32,7 @@ par.names = c(
 	'RM.1.n_pips_to_Uturn',# = 15,
 	'RM.1.tp_by_sl'# = 3
 	)
-par <- as.list(str.vector)
+par <- append(par, as.list(genes))
 names(par) <- par.names
 
 out <- backtest(strategy=S.2,
@@ -37,7 +46,7 @@ out <- backtest(strategy=S.2,
 								enable.output = F)
 
 final.balance <- as.numeric(tail(out$balanceTS,1))
-cat(str, '\t', final.balance, '\n')
+cat(chromo, '\t', final.balance, '\n')
 #plot(out$balanceTS)
 
 #ordersReport <- out$ordersReport
