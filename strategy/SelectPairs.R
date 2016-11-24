@@ -84,8 +84,12 @@ SP.2StrMat <- function( par=list() ){
 	### Minimum difference filter ##
 	# if M4_diff is a vector and min_diff a list it should work
 	toRemove = which( abs(M4_diff) < min_diff)
-	selectedPairs <- M4_diff[-toRemove]
-	selectedPairs <- selectedPairs[order(abs(selectedPairs), decreasing=T)]
+	if(length(toRemove)>0) {
+		selectedPairs <- M4_diff[-toRemove]
+		selectedPairs <- selectedPairs[order(abs(selectedPairs), decreasing=T)]
+	} else {
+		selectedPairs <- M4_diff
+	}
 	
 	### M3 filter and M4 filter ##
 	toRemove = numeric(0)
@@ -93,20 +97,14 @@ SP.2StrMat <- function( par=list() ){
 		c1 = substr(p,1,3)
 		c2 = substr(p,4,6)
 		### M3 filter ###
-		if( selectedPairs[p] > 0  &&  M3[c1,c2] != 2 ){
+		if( selectedPairs[p] > 0  &&  M3[c1,c2] != 2 ) {
 			toRemove = c(toRemove, p)
-			next
-		}
-		if( selectedPairs[p] < 0  &&  M3[c1,c2] != -2 ){
+		} else if( selectedPairs[p] < 0  &&  M3[c1,c2] != -2 ) {
 			toRemove = c(toRemove, p)
-			next
-		}
-		### M4 filter ###
-		if( abs(M4[c1]) < min_strength && abs(M4[c2]) < min_strength ){
+		} else if( abs(M4[c1]) < min_strength && abs(M4[c2]) < min_strength ) {
+			### M4 filter ###
 			toRemove = c(toRemove, p)
-			next
 		}
-		
 	}
 	
 	if(length(toRemove)>0){
