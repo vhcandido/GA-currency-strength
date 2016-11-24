@@ -1,0 +1,116 @@
+UOO.1.pips_until_SL
+PAIR - DONE
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> UpdateOpenOrders.R:UOO.1
+            -> UpdateOpenOrders.R:upSL_02
+end
+
+
+SP.2StrMat.n_sma
+PAIR - HARD
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> SelectPairs.R:SP.2StrMat
+            -> StrengthMatrix.R:SM.Sma (gonna compute SMA for each pair)
+                -> Useful.R:get_pairs_column_tail
+            -> StrengthMatrix.R:SM.Fibo
+                -> Useful.R:func_close_ind_mat -> func_sma@parent
+end
+
+
+SP.2StrMat.min_diff
+PAIR - MODERATE
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> SelectPairs.R:SP.2StrMat
+end
+
+
+SP.2StrMat.min_strength
+CURRENCY - VERY EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> SelectPairs.R:SP.2StrMat
+end
+
+
+F.Sma.n_sma
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.Sma
+end
+
+
+F.Sma.n_pips
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.Sma
+end
+
+
+I SHOULD ADD WHICH LINE OF STOCHASTIC TO USE (3 PARAMS)
+ALSO ADD MIN_THRESHOLD, MAX_THRESHOLD, MIN_FALLING, MAX_RISING (4 PARAMS) FOR STOCHASTIC
+
+
+F.StochRsi.nrsi
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.StochRsi
+end
+
+
+F.StochRsi.nFastK
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.StochRsi
+end
+
+
+F.StochRsi.nFastD
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.StochRsi
+end
+
+
+F.StochRsi.nSlowD
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> Filters.R:F.StochRsi
+end
+
+
+RM.1.n_pips_to_Uturn
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> RiskManager.R:RM.1
+end
+
+
+RM.1.tp_by_sl
+PAIR - EASY
+begin
+-> BackTest.R:backtest
+    -> Strategy.R:S.2
+        -> RiskManager.R:RM.1
+end
+
