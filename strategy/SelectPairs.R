@@ -81,11 +81,11 @@ SP.2StrMat <- function( par=list() ){
 	M4 <- rowSums(M3,na.rm=TRUE)
 	M4_diff = vapply(ev$pairs, function(p) M4[substr(p,1,3)] - M4[substr(p,4,6)], 0)
 	
-	selectedPairs = M4_diff[ order( abs(M4_diff), decreasing = TRUE) ]
-	
 	### Minimum difference filter ##
-	toRemove = which( abs(selectedPairs) < min_diff) 
-	selectedPairs = selectedPairs[-toRemove]
+	# if M4_diff is a vector and min_diff a list it should work
+	toRemove = which( abs(M4_diff) < min_diff)
+	selectedPairs <- M4_diff[-toRemove]
+	selectedPairs <- selectedPairs[order(abs(selectedPairs), decreasing=T)]
 	
 	### M3 filter and M4 filter ##
 	toRemove = numeric(0)
