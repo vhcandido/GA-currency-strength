@@ -62,7 +62,7 @@ ALSO ADD MIN_THRESHOLD, MAX_THRESHOLD, MIN_FALLING, MAX_RISING (4 PARAMS) FOR ST
 
 
 F.StochRsi.nrsi
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
@@ -71,7 +71,7 @@ end
 
 
 F.StochRsi.nFastK
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
@@ -80,7 +80,7 @@ end
 
 
 F.StochRsi.nFastD
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
@@ -89,7 +89,7 @@ end
 
 
 F.StochRsi.nSlowD
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2

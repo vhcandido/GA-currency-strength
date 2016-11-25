@@ -17,7 +17,11 @@ chromo <- paste("1,6",
 								paste(rep(4,7), collapse = ','),
 								paste(rep(8,21), collapse = ','),
 								paste(rep(5,21), collapse = ','),
-								"14,5,5,3,15,3",
+								paste(rep(14,21), collapse = ','),
+								paste(rep(5,21), collapse = ','),
+								paste(rep(5,21), collapse = ','),
+								paste(rep(3,21), collapse = ','),
+								"15,3",
 								sep=',')
 par <- list()
 
@@ -48,13 +52,19 @@ genes <- genes[-1]
 par <- parse.genes(par, genes, ev$currencies, 7)
 genes <- genes[-c(1:7)] # remove from genes
 
-# Taking the next 21 -> F.Sma.n_sma
-par <- parse.genes(par, genes, ev$pairsTotal, 21)
-genes <- genes[-c(1:21)] # remove from genes
+# Taking the next 21 -> F.Sma for:
+# n_sma, n_pips
+for(i in 1:2) {
+	par <- parse.genes(par, genes, ev$pairsTotal, 21)
+	genes <- genes[-c(1:21)] # remove from genes
+}
 
-# Taking the next 21 -> F.Sma.n_pips
-par <- parse.genes(par, genes, ev$pairsTotal, 21)
-genes <- genes[-c(1:21)] # remove from genes
+# Taking the next 21 -> F.StochRsi for:
+# nrsi, nFastK, nFastD, nSlowD
+for(i in 1:4) {
+	par <- parse.genes(par, genes, ev$pairsTotal, 21)
+	genes <- genes[-c(1:21)] # remove from genes
+}
 
 par.names = c(
 	'UOO.1.pips_until_SL',# = 15,

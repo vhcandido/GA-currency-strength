@@ -41,10 +41,10 @@ F.Sma <- function(pairsVec, par=list()){
 
 
 F.StochRsi <- function(pairsVec, par=list()){
-	if(is.null(par$nrsi)){ par$nrsi=14; }
-	if(is.null(par$nFastK)){ par$nFastK=5; }
-	if(is.null(par$nFastD)){ par$nFastD=5; }
-	if(is.null(par$nSlowD)){ par$nSlowD=3; }
+	#if(is.null(par$nrsi)){ par$nrsi=14; }
+	#if(is.null(par$nFastK)){ par$nFastK=5; }
+	#if(is.null(par$nFastD)){ par$nFastD=5; }
+	#if(is.null(par$nSlowD)){ par$nSlowD=3; }
 	
 	nrsi = par$nrsi
 	nFastK = par$nFastK
@@ -53,8 +53,8 @@ F.StochRsi <- function(pairsVec, par=list()){
 	
 	toRemove = numeric(0)
 	for(p in names(pairsVec)){
-		rsi = RSI(ev$quotes[[p]][,'Close'], nrsi)
-		stochRsi = floor(100*as.numeric( tail( stoch( rsi, nFastK, nFastD, nSlowD )[,'fastD'] , 2) ))/100
+		rsi = RSI(ev$quotes[[p]][,'Close'], nrsi[[p]])
+		stochRsi = floor(100*as.numeric( tail( stoch( rsi, nFastK[[p]], nFastD[[p]], nSlowD[[p]] )[,'fastD'] , 2) ))/100
 		
 		if(pairsVec[p] > 0){ ## Buy
 		  if(!(stochRsi[2] < 0.2 || (stochRsi[2] < 0.7 &&  stochRsi[2] - stochRsi[1] > 0) ))
