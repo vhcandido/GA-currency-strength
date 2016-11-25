@@ -70,13 +70,19 @@ get_pairs_column_tail <- function(colname, n) {
 ## example:
 ## SMA
 ## func = function(x){SMA(x, 72);}
-func_close_ind_mat <- function(quotes, FUN) {
+func_close_ind_mat <- function(quotes, n_ma) {
 	# First it has to store all Close values in an xts object
 	m1 <- get_pairs_column(quotes, 'Close')
 	# Naming the columns
 	names(m1) <- ev$pairs
 	# Check if Close is above or under SMA (for each pair in each time)
-	m1 <- as.xts(apply(m1, 2, function(x) ifelse(x > FUN(x), 1, -1)), index(m1))
+	m1 <- as.xts(matrix(
+			unlist(lapply(
+					ev$pairs,
+					function(p) ifelse(m1[,p] > SMA(m1[,p], n_ma[[p]]), 1, -1)
+				)), ncol=21), index(m1))
+	# Renaming the columns since it was lost in the last expression
+	names(m1) <- ev$pairs
 	return(m1)
 }
 

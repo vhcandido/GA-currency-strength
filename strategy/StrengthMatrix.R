@@ -141,12 +141,11 @@ compute_m2 <- function(quotes, M1, n_ma=72) {
 ###########################################################
 ### Compute Matrix 2 for last time
 ##########################################################
-SM.Fibo <- function(quotes, n_ma=72) {	
+SM.Fibo <- function(quotes, n_ma) {
 	# Add pair name or n_ma as parameter to func_sma
 	# With pair name we can also parametrize the moving average!
-	func_sma = function(x){SMA(x, n_ma);} 
-	M1 <- func_close_ind_mat(quotes, func_sma)
-	retrieve_m( tail(compute_m2(quotes,M1, n_ma), 1 ) )
+	M1 <- func_close_ind_mat(quotes, n_ma)
+	retrieve_m( tail(compute_m2(quotes,M1, n_ma = 72), 1 ) )
 }
 
 
