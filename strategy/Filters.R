@@ -14,7 +14,7 @@
 F.Sma <- function(pairsVec, par=list()){
 	nn <- nrow(ev$quotes[[1]])
 	#if(is.null(par$n_sma)){ par$n_sma=8; }
-	if(is.null(par$n_pips)){ par$n_pips=5; }
+	#if(is.null(par$n_pips)){ par$n_pips=5; }
 	
 	n_sma = par$n_sma
 	n_pips = par$n_pips
@@ -23,11 +23,11 @@ F.Sma <- function(pairsVec, par=list()){
 	for(p in names(pairsVec)){
 		if(pairsVec[p] > 0){ ## Buy
 		  sma = mean( ev$quotes[[p]][(nn-n_sma[[p]]+1):nn, "High"] )
-		  if( ev$quotes[[p]][[nn, "Close"]] <=  sma + n_pips/ev$pip_rate[[p]] )
+		  if( ev$quotes[[p]][[nn, "Close"]] <=  sma + n_pips[[p]]/ev$pip_rate[[p]] )
 			toRemove = c(toRemove, p)
 		}else{  ## Sell
 		  sma = mean( ev$quotes[[p]][(nn-n_sma[[p]]+1):nn, "Low"] )
-		  if( ev$quotes[[p]][[nn, "Close"]] >=  sma - n_pips/ev$pip_rate[[p]] )
+		  if( ev$quotes[[p]][[nn, "Close"]] >=  sma - n_pips[[p]]/ev$pip_rate[[p]] )
 		    toRemove = c(toRemove, p)
 		}
 	}

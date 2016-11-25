@@ -49,7 +49,7 @@ end
 
 
 F.Sma.n_pips
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2

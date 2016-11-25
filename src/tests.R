@@ -10,7 +10,8 @@ chromo <- paste("1,6",
 								"72,6",
 								paste(rep(4,7), collapse = ','),
 								paste(rep(8,21), collapse = ','),
-								"5,14,5,5,3,15,3",
+								paste(rep(5,21), collapse = ','),
+								"14,5,5,3,15,3",
 								sep=',')
 par <- list()
 
@@ -50,6 +51,12 @@ par <- append(par, list(params))
 genes <- genes[-c(1:7)] # remove from genes
 
 # Taking the next 21 -> F.Sma.n_sma
+params <- as.list(genes[c(1:21)])
+names(params) <- ev$pairsTotal
+par <- append(par, list(params))
+genes <- genes[-c(1:21)] # remove from genes
+
+# Taking the next 21 -> F.Sma.n_pips
 params <- as.list(genes[c(1:21)])
 names(params) <- ev$pairsTotal
 par <- append(par, list(params))
