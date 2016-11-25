@@ -9,7 +9,7 @@ end
 
 
 SP.2StrMat.n_sma
-PAIR - HARD
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2

@@ -38,7 +38,7 @@ SM.Sma <- function(n_sma) {
 ###########################################################
 ### Compute Matrix 2 for all times
 ##########################################################
-compute_m2 <- function(quotes, M1, n_ma=72) {
+compute_m2 <- function(quotes, M1, n_ma) {
 	nn <- nrow(quotes[[1]])
 	M2 <- matrix(NA, nrow=nrow(M1), ncol=ncol(M1))
 	colnames(M2) <- names(M1)
@@ -49,12 +49,12 @@ compute_m2 <- function(quotes, M1, n_ma=72) {
 				#print(paste('p',p))
 			  pair <- quotes[[p]]
 				q <- as.matrix(pair)
-				sma <- SMA(pair$Close, n_ma)
+				sma <- SMA(pair$Close, n_ma[[p]])
 				## Vector of indexes for cross-up and cross-down points, 
 				## NA for nothing,
 				## +1 for cross-up, 
 				## -1 for cross-down
-				cr <- carried_cross(pair, n_ma)
+				cr <- carried_cross(pair, n_ma[[p]])
 				colnames(cr) <- c('Up', 'Down')
 				cross_up <- cr[,'Up']
 				cross_dn <- cr[,'Down']
@@ -145,7 +145,7 @@ SM.Fibo <- function(quotes, n_ma) {
 	# Add pair name or n_ma as parameter to func_sma
 	# With pair name we can also parametrize the moving average!
 	M1 <- func_close_ind_mat(quotes, n_ma)
-	retrieve_m( tail(compute_m2(quotes,M1, n_ma = 72), 1 ) )
+	retrieve_m( tail(compute_m2(quotes,M1, n_ma), 1 ) )
 }
 
 
