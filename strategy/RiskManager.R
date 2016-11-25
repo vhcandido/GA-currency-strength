@@ -13,8 +13,8 @@
 
 RM.1 <- function(openOrders, accBalance, spread, orderRisk, maxTotalRisk, pairsVec, par=list() ){
 	nn <- nrow(ev$quotes[[1]])
-	if(is.null(par$n_pips_to_Uturn)){ par$n_pips_to_Uturn=15; }
-	if(is.null(par$tp_by_sl)){ par$tp_by_sl=3; }
+	#if(is.null(par$n_pips_to_Uturn)){ par$n_pips_to_Uturn=15; }
+	#if(is.null(par$tp_by_sl)){ par$tp_by_sl=3; }
 	
 	n_pips_to_Uturn = par$n_pips_to_Uturn
 	tp_by_sl = par$tp_by_sl
@@ -33,14 +33,14 @@ RM.1 <- function(openOrders, accBalance, spread, orderRisk, maxTotalRisk, pairsV
 		if(pairsVec[p] > 0){ ## Buy
 			exchange_rate <- exchange_rate + ev$spread[[p]]/ev$pip_rate[[p]]
 			last_bottom_price = min(ev$quotes[[p]][last_U_turn_idx(p, nn, low=TRUE):nn,'Low'])
-			SL <- last_bottom_price - n_pips_to_Uturn/ev$pip_rate[[p]]
-			TP <- exchange_rate + (exchange_rate - SL)*tp_by_sl 
+			SL <- last_bottom_price - n_pips_to_Uturn[[p]]/ev$pip_rate[[p]]
+			TP <- exchange_rate + (exchange_rate - SL)*tp_by_sl[[p]]
 			type = 'Buy'
 		}else{ ## Sell
 			exchange_rate <- exchange_rate - ev$spread[[p]]/ev$pip_rate[[p]]
 			last_top_price = max(ev$quotes[[p]][last_U_turn_idx(p, nn, low=FALSE):nn,'High'])
-			SL <- last_top_price + n_pips_to_Uturn/ev$pip_rate[[p]]
-			TP <- exchange_rate - (SL - exchange_rate) * tp_by_sl
+			SL <- last_top_price + n_pips_to_Uturn[[p]]/ev$pip_rate[[p]]
+			TP <- exchange_rate - (SL - exchange_rate) * tp_by_sl[[p]]
 			type = 'Sell'
 		}
 		

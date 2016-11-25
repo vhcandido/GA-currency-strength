@@ -21,7 +21,8 @@ chromo <- paste("1,6",
 								paste(rep(5,21), collapse = ','),
 								paste(rep(5,21), collapse = ','),
 								paste(rep(3,21), collapse = ','),
-								"15,3",
+								paste(rep(15,21), collapse = ','),
+								paste(rep(3,21), collapse = ','),
 								sep=',')
 par <- list()
 
@@ -62,6 +63,13 @@ for(i in 1:2) {
 # Taking the next 21 -> F.StochRsi for:
 # nrsi, nFastK, nFastD, nSlowD
 for(i in 1:4) {
+	par <- parse.genes(par, genes, ev$pairsTotal, 21)
+	genes <- genes[-c(1:21)] # remove from genes
+}
+
+# Taking the next 21 -> RM.1 for:
+# n_pips_to_Uturn, tp_by_sl
+for(i in 1:2) {
 	par <- parse.genes(par, genes, ev$pairsTotal, 21)
 	genes <- genes[-c(1:21)] # remove from genes
 }
