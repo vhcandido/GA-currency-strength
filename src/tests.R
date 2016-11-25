@@ -4,6 +4,12 @@ source('BackTest.R')
 cat('Ready to run\n\n')
 #source('Plot.R')
 
+parse.genes <- function(par, genes, names, n) {
+	params <- as.list(genes[c(1:n)])
+	names(params) <- names
+	return(append(par, list(params)))
+}
+
 # Chromosome received from GA
 chromo <- paste("1,6",
 								paste(rep(15,21), collapse = ','),
@@ -23,43 +29,31 @@ risk <- genes[c(1,2)]/100
 genes <- genes[-c(1,2)] # remove from genes
 
 # Taking the next 21 -> UOO.1.pips_until_SL
-params <- as.list(genes[c(1:21)])
-names(params) <- ev$pairsTotal
-par <- append(par, list(params))
+par <- parse.genes(par, genes, ev$pairsTotal, 21)
 genes <- genes[-c(1:21)] # remove from genes
 
 # Taking the next 21 -> SP.2StrMat.n_sma
-#params <- as.list(genes[c(1:21)])
-#names(params) <- ev$pairsTotal
-#par <- append(par, list(params))
+#par <- parse.genes(par, genes, ev$pairsTotal, 21)
 #genes <- genes[-c(1:21)] # remove from genes
 par <- append(par, as.list(genes[1]))
 genes <- genes[-1]
 
 # Taking the next 21 -> SP.2StrMat.min_diff
-#params <- as.list(genes[c(1:21)])
-#names(params) <- ev$pairsTotal
-#par <- append(par, list(params))
+#par <- parse.genes(par, genes, ev$pairsTotal, 21)
 #genes <- genes[-c(1:21)] # remove from genes
 par <- append(par, as.list(genes[1]))
 genes <- genes[-1]
 
 # Taking the next 7 -> SP.2StrMat.min_strength
-params <- as.list(genes[c(1:7)])
-names(params) <- ev$currencies
-par <- append(par, list(params))
+par <- parse.genes(par, genes, ev$currencies, 7)
 genes <- genes[-c(1:7)] # remove from genes
 
 # Taking the next 21 -> F.Sma.n_sma
-params <- as.list(genes[c(1:21)])
-names(params) <- ev$pairsTotal
-par <- append(par, list(params))
+par <- parse.genes(par, genes, ev$pairsTotal, 21)
 genes <- genes[-c(1:21)] # remove from genes
 
 # Taking the next 21 -> F.Sma.n_pips
-params <- as.list(genes[c(1:21)])
-names(params) <- ev$pairsTotal
-par <- append(par, list(params))
+par <- parse.genes(par, genes, ev$pairsTotal, 21)
 genes <- genes[-c(1:21)] # remove from genes
 
 par.names = c(
