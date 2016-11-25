@@ -31,7 +31,7 @@ end
 
 
 SP.2StrMat.min_strength
-CURRENCY - VERY EASY
+CURRENCY - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
@@ -40,7 +40,7 @@ end
 
 
 F.Sma.n_sma
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2

@@ -67,7 +67,7 @@ SP.1StrMat <- function( par=list() ){
 SP.2StrMat <- function( par=list() ){
 	if(is.null(par$n_sma)){ par$n_sma=72; }
 	if(is.null(par$min_diff)){ par$min_diff=6; }
-	if(is.null(par$min_strength)){ par$min_strength=4; }
+	#if(is.null(par$min_strength)){ par$min_strength=4; }
 	
 	### parameter of the main strategy ###
 	n_sma = par$n_sma
@@ -101,7 +101,7 @@ SP.2StrMat <- function( par=list() ){
 			toRemove = c(toRemove, p)
 		} else if( selectedPairs[p] < 0  &&  M3[c1,c2] != -2 ) {
 			toRemove = c(toRemove, p)
-		} else if( abs(M4[c1]) < min_strength && abs(M4[c2]) < min_strength ) {
+		} else if( abs(M4[c1]) < min_strength[[c1]] && abs(M4[c2]) < min_strength[[c2]] ) {
 			### M4 filter ###
 			toRemove = c(toRemove, p)
 		}

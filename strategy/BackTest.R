@@ -20,6 +20,7 @@ ev$pairsTotal <- c('AUDCAD','AUDJPY','AUDNZD','AUDUSD',
 		'GBPAUD','GBPCAD','GBPJPY','GBPNZD','GBPUSD',
 		'NZDCAD','NZDJPY','NZDUSD',
 		'USDCAD','USDJPY')
+ev$currencies <- sort( unique( unlist( lapply(ev$pairsTotal, function(p) c(substr(p,1,3),substr(p,4,6)))) ) )
 ev$spreadTotal <- c(
 					1.8, #AUDCAD
 					1.4, #AUDJPY
