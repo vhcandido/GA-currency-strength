@@ -98,7 +98,7 @@ end
 
 
 RM.1.n_pips_to_Uturn
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
@@ -107,7 +107,7 @@ end
 
 
 RM.1.tp_by_sl
-PAIR - EASY
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
