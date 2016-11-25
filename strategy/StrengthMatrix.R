@@ -14,18 +14,22 @@ compute_m1 <- function(quotes, n_ma=72) {
 ### Matrix[currencies x currencies] 
 ### for SMA 
 ######################################
-SM.Sma <- function(n_sma=72) {
-	# Matrix with last 'n_sma' closes of all pairs
-	# cl is a xts with 21 columns of close values
-	cl <- get_pairs_column_tail(colname='Close', n=n_sma)
-	## SMA(n_sma)
-	# sma is a named vector with each sma value for this point
-	sma <- colMeans(cl)
-	## m1 matrix
-	m1 = matrix(ifelse(cl[n_sma,] > sma, 1, -1), nrow=1)
-	colnames(m1) = colnames(cl)
+SM.Sma <- function(n_sma) {
+	# Get the last n_sma Closes,
+	# compute a SMA on it and
+	# return if the last Close is above the SMA
+	if.sma <- sapply(ev$pairs, function(pair) {
+		cl <- tail(Cl(ev$quotes[[pair]]), n_sma[[pair]])
+		sma <- SMA(cl, n_sma[[pair]])
+		ifelse(cl[n_sma[[pair]]] > sma, 1, -1)
+	})
 	
-	## tranform M1 vector to M1 matrix
+	# Transform the named vector to a named matrix row
+	# to be compatible with retrieve_m, which expects a matrix row
+	m1 <- matrix(if.sma, nrow=1)
+	colnames(m1) = ev$pairs
+	
+	## tranform M1 matrix row to M1 matrix
 	retrieve_m(m1)
 }
 

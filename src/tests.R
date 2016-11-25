@@ -13,7 +13,7 @@ parse.genes <- function(par, genes, names, n) {
 # Chromosome received from GA
 chromo <- paste("1,6",
 								paste(rep(15,21), collapse = ','),
-								"72",
+								paste(rep(72,21), collapse = ','),
 								paste(rep(6,21), collapse = ','),
 								paste(rep(4,7), collapse = ','),
 								paste(rep(8,21), collapse = ','),
@@ -38,15 +38,12 @@ genes <- genes[-c(1,2)] # remove from genes
 par <- parse.genes(par, genes, ev$pairsTotal, 21)
 genes <- genes[-c(1:21)] # remove from genes
 
-# Taking the next 21 -> SP.2StrMat.n_sma
-#par <- parse.genes(par, genes, ev$pairsTotal, 21)
-#genes <- genes[-c(1:21)] # remove from genes
-par <- append(par, as.list(genes[1]))
-genes <- genes[-1]
-
-# Taking the next 21 -> SP.2StrMat.min_diff
-par <- parse.genes(par, genes, ev$pairsTotal, 21)
-genes <- genes[-c(1:21)] # remove from genes
+# Taking the next 21 -> SP.2StrMat for:
+# n_sma, min_diff
+for(i in 1:2) {
+	par <- parse.genes(par, genes, ev$pairsTotal, 21)
+	genes <- genes[-c(1:21)] # remove from genes
+}
 
 # Taking the next 7 -> SP.2StrMat.min_strength
 par <- parse.genes(par, genes, ev$currencies, 7)

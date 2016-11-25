@@ -65,7 +65,7 @@ SP.1StrMat <- function( par=list() ){
 
 #### 2 Strength Matrix #####
 SP.2StrMat <- function( par=list() ){
-	if(is.null(par$n_sma)){ par$n_sma=72; }
+	#if(is.null(par$n_sma)){ par$n_sma=72; }
 	#if(is.null(par$min_diff)){ par$min_diff=6; }
 	#if(is.null(par$min_strength)){ par$min_strength=4; }
 	
@@ -76,7 +76,8 @@ SP.2StrMat <- function( par=list() ){
 	
 	### first pairs selection ###
 	M1 <- SM.Sma(n_sma)
-	M2 <- SM.Fibo(ev$quotes,n_sma)
+	#M2 <- SM.Fibo(ev$quotes,n_sma)
+	M2 <- SM.Fibo(ev$quotes,72)
 	M3 <- M1 + M2
 	M4 <- rowSums(M3,na.rm=TRUE)
 	M4_diff = vapply(ev$pairs, function(p) M4[substr(p,1,3)] - M4[substr(p,4,6)], 0)
