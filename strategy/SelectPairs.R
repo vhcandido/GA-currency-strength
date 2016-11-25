@@ -66,7 +66,7 @@ SP.1StrMat <- function( par=list() ){
 #### 2 Strength Matrix #####
 SP.2StrMat <- function( par=list() ){
 	if(is.null(par$n_sma)){ par$n_sma=72; }
-	if(is.null(par$min_diff)){ par$min_diff=6; }
+	#if(is.null(par$min_diff)){ par$min_diff=6; }
 	#if(is.null(par$min_strength)){ par$min_strength=4; }
 	
 	### parameter of the main strategy ###
