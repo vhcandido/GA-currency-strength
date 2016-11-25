@@ -22,7 +22,7 @@ end
 
 
 SP.2StrMat.min_diff
-PAIR - MODERATE
+PAIR - DONE
 begin
 -> BackTest.R:backtest
     -> Strategy.R:S.2
