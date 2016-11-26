@@ -36,6 +36,8 @@ con <- socketConnection(
 while(TRUE) {
 	cat('\nListening...\n')
 	input <- readLines(con, 1)
+
+	if(length(input) == 0) { cat('No message received. Exiting...\n'); break; }
 	if(input != 'NEWGEN') { break; }
 
 	while(TRUE) {
@@ -44,6 +46,7 @@ while(TRUE) {
 		if(input == 'ENDGEN') { break; }
 
 		# Evaluate fitness
+		cat('Calling backtest\n')
 		final.balance <- chromo.backtest(input)
 
 		# Send the fitness to the client

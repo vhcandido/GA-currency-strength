@@ -10,7 +10,7 @@ parse.genes <- function(par, genes, names, n) {
 	return(append(par, list(params)))
 }
 
-chromo.backtest <- function(chromo) {
+chromo.backtest <- function(chromo, debug=FALSE) {
 	par <- list()
 	
 	# Chromosome splitted into its genes
@@ -73,6 +73,8 @@ chromo.backtest <- function(chromo) {
 	# Append the remaining genes and name the list
 	par <- append(par, as.list(genes))
 	names(par) <- par.names
+
+	if(debug) { print(par) }
 	
 	out <- backtest(strategy=S.2,
 									par = par,
@@ -81,8 +83,8 @@ chromo.backtest <- function(chromo) {
 									accBalance = 250,
 									orderRisk = risk[1],
 									maxTotalRisk = risk[2],
-									logFile = 'Log.log',
-									enable.output = T)
+									#logFile = 'Log.log',
+									enable.output = F)
 	
 	final.balance <- as.numeric(tail(out$balanceTS,1))
 	return(final.balance)
