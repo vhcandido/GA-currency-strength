@@ -1,6 +1,6 @@
 # rstudio data
 *.Rhistory
-*.Rdata
+*.RData
 
 # Python compiled files
 *.pyc
