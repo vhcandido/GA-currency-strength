@@ -39,7 +39,6 @@ else
 	port=$2
 fi
 
-exit
 # Open R server (chromosome backtest)
 gnome-terminal -e "bash -ic 'Rscript server.R $port; exec bash'"
 
