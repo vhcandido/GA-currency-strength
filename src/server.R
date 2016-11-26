@@ -1,6 +1,6 @@
 source('strategy.R')
 
-# Chromosome received from GA
+# Example of chromosome received from GA
 chromo <- paste("1,6",
 		paste(rep(15,21), collapse = ','),
 		paste(rep(72,21), collapse = ','),
@@ -16,4 +16,40 @@ chromo <- paste("1,6",
 		paste(rep(3,21), collapse = ','),
 		sep=',')
 
-final.balance <- chromo.backtest(chromo)
+# Read parameters from stdin
+param <- commandArgs(trailingOnly = TRUE)
+if(length(param) < 1) {
+	cat('No parameters received\nExiting...\n')
+	quit('no')
+}
+
+# Storing comunication port number
+port = param[1]
+
+# Open socket connection
+con <- socketConnection(
+			host = 'localhost',
+			port = port,
+			blocking = TRUE,
+			server = TRUE,
+			open = 'r+')
+while(TRUE) {
+	cat('\nListening...\n')
+	input <- readLines(con, 1)
+	if(input != 'NEWGEN') { break; }
+
+	while(TRUE) {
+		cat('Waiting for the next chromosome\n')
+		input <- readLines(con, 1)
+		if(input == 'ENDGEN') { break; }
+
+		# Evaluate fitness
+		final.balance <- chromo.backtest(input)
+
+		# Send the fitness to the client
+		writeLines(toString(final.balance), con)
+	}
+
+
+}
+close(con)

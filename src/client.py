@@ -17,6 +17,16 @@ def parse_json(filename):
             data = json.load(data_file)
     return data
 
+
+def send_msg(sock, msg):
+        #totalsent = 0
+        #while totalsent < MSGLEN:
+        #    sent = self.sock.send(msg[totalsent:])
+        #    if sent == 0:
+        #        raise RuntimeError("socket connection broken")
+        #    totalsent = totalsent + sent
+        sock.send( msg.encode() )
+
 def main(filename=None, port=1010):
     if not filename:
         print 'Using default parameters'
@@ -40,8 +50,11 @@ def main(filename=None, port=1010):
             mutation = params['mutation'],
             elitism = params['elitism'],
             imigration = params['imigration'],
-            tour_size = params['tour_size'],
-            port = port)
+            tour_size = params['tour_size'])
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("localhost", port))
+    Chromo.sock = sock
 
     # Generations without improvements
     no_improv = 0
@@ -49,7 +62,9 @@ def main(filename=None, port=1010):
         print 'Generation %d' % (i+1)
 
         print 'Calculating fitness'
+        send_message(sockk, 'NEWGEN')
         best = pop.evaluate()
+        send_message(sock, 'ENDGEN')
         #pop.plot_evolution()
 
         if not pop.improved:
@@ -68,6 +83,10 @@ def main(filename=None, port=1010):
     print 'Best solution:'
     #pop.show_first()
     print best[0], Chromo.to_str(best)
+
+    # Closing connection
+    send_msg(sock, 'ENDGA')
+    sock.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 2:

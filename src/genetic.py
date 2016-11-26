@@ -1,6 +1,7 @@
 import random
 
 class Chromo(object):
+    conn = None
     @staticmethod
     def generate_genes(size = None):
         if not size:
@@ -9,7 +10,14 @@ class Chromo(object):
 
     @staticmethod
     def fitness_calc(chromo):
-        return 0.0
+        msg = 'NEWCHROMO\n'
+        sock.send( msg.encode() )
+
+        msg = Chromo.to_str(chromo) + '\n'
+        sock.send( msg.encode() )
+
+        fitness = float(s.recv(5000))
+        return fitness
 
     @staticmethod
     def to_str(chromo):
