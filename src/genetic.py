@@ -17,6 +17,14 @@ class Chromo(object):
         return float(fitness)
 
     @staticmethod
+    def crossover((parent1, parent2)):
+        return [parent1, parent2]
+
+    @staticmethod
+    def mutate(chromo):
+        return chromo
+
+    @staticmethod
     def to_str(chromo):
         return ','.join(str(gene) for gene in chromo[1])
 
