@@ -10,18 +10,15 @@ class Chromo(object):
 
     @staticmethod
     def fitness_calc(chromo):
-        msg = 'NEWCHROMO\n'
-        sock.send( msg.encode() )
-
         msg = Chromo.to_str(chromo) + '\n'
-        sock.send( msg.encode() )
+        Chromo.sock.send( msg.encode() )
 
-        fitness = float(s.recv(5000))
-        return fitness
+        fitness = Chromo.sock.recv(5000)
+        return float(fitness)
 
     @staticmethod
     def to_str(chromo):
-        return ','.join(gene for gene in chromo[1])
+        return ','.join(str(gene) for gene in chromo[1])
 
 class Population(object):
     def __init__(self,
@@ -38,7 +35,7 @@ class Population(object):
         self.elitism = elitism
         self.imigration = imigration
         self.tour_size = tour_size
-        self.population = [ (Chromo.generate_genes(), 0.0) for i in range(size) ]
+        self.population = [ (0.0, Chromo.generate_genes()) for i in range(size) ]
 
         self.improved = False
         self.cur_best = (-10000, None)
@@ -52,8 +49,8 @@ class Population(object):
         return [parent1, parent2]
 
     def evaluate(self):
-        self.population = sorted(
-                [ (Chromo.fitness_calc(ch), ch) for ch in self.population ]
+        self.population = sorted(\
+                [ (Chromo.fitness_calc(ch), ch) for ch in self.population ],\
                 reverse = True)
 
         # Check if it has improved

@@ -8,13 +8,14 @@
 # | a trading strategy based on Technical Analysis and currency strength.     |
 # +===========================================================================+
 
-from genetic import Population
+from genetic import Population, Chromo
+import socket
 import sys
 import json
 
 def parse_json(filename):
     with open(filename) as data_file:
-            data = json.load(data_file)
+        data = json.load(data_file)
     return data
 
 
@@ -53,7 +54,7 @@ def main(filename=None, port=1010):
             tour_size = params['tour_size'])
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("localhost", port))
+    sock.connect(("localhost", int(port)))
     Chromo.sock = sock
 
     # Generations without improvements
@@ -62,9 +63,9 @@ def main(filename=None, port=1010):
         print 'Generation %d' % (i+1)
 
         print 'Calculating fitness'
-        send_message(sockk, 'NEWGEN')
+        send_msg(sock, 'NEWGEN\n')
         best = pop.evaluate()
-        send_message(sock, 'ENDGEN')
+        send_msg(sock, 'ENDGEN\n')
         #pop.plot_evolution()
 
         if not pop.improved:
@@ -85,7 +86,7 @@ def main(filename=None, port=1010):
     print best[0], Chromo.to_str(best)
 
     # Closing connection
-    send_msg(sock, 'ENDGA')
+    send_msg(sock, 'ENDGA\n')
     sock.close()
 
 if __name__ == '__main__':
