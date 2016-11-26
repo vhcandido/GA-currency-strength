@@ -17,7 +17,7 @@ def parse_json(filename):
             data = json.load(data_file)
     return data
 
-def main(filename=None):
+def main(filename=None, port=1010):
     if not filename:
         print 'Using default parameters'
         params = {
@@ -28,8 +28,7 @@ def main(filename=None):
                 'mutation': 0.05,
                 'elitism': 0.2,
                 'imigration': 0.2,
-                'tour_size' = 8,
-                'port': 1010
+                'tour_size' : 8,
                 }
     else:
         print 'Loading parameters from %s' % (filename)
@@ -42,7 +41,7 @@ def main(filename=None):
             elitism = params['elitism'],
             imigration = params['imigration'],
             tour_size = params['tour_size'],
-            port = params['port'] )
+            port = port)
 
     # Generations without improvements
     no_improv = 0
@@ -71,10 +70,10 @@ def main(filename=None):
     print best[0], Chromo.to_str(best)
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        main(sys.argv[1])
+    if len(sys.argv) > 2:
+        main(sys.argv[1], sys.argv[2])
     else:
-        print("\nInput file was expected.\nExiting...\n")
+        print("\nInput file and comunication port were expected.\nExiting...\n")
         exit(1)
 
 
