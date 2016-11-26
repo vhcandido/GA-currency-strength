@@ -6,5 +6,5 @@
     "mutation": 0.05,
     "elitism": 0.2,
     "imigration": 0.2,
-    "tour_size" : 8,
+    "tour_size" : 8
 }
