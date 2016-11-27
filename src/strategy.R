@@ -11,6 +11,7 @@ parse.genes <- function(par, genes, names, n) {
 }
 
 chromo.backtest <- function(chromo, debug=FALSE) {
+	if(debug) { cat(chromo, '\n'); }
 	par <- list()
 	
 	# Chromosome splitted into its genes
@@ -74,7 +75,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	par <- append(par, as.list(genes))
 	names(par) <- par.names
 
-	if(debug) { print(par) }
+	#if(debug) { print(par) }
 	
 	out <- backtest(strategy=S.2,
 									par = par,

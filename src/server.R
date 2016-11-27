@@ -47,7 +47,8 @@ while(TRUE) {
 
 		# Evaluate fitness
 		cat('Calling backtest\n')
-		final.balance <- chromo.backtest(input)
+		final.balance <- chromo.backtest(input, T)
+		cat('Fitness: ', final.balance, '\n\n')
 
 		# Send the fitness to the client
 		writeLines(toString(final.balance), con)
