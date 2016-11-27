@@ -9,11 +9,13 @@ class Chromo(object):
         return [ random.randint(1,100) for i in range(size) ]
 
     @staticmethod
-    def fitness_calc(chromo):
-        msg = Chromo.to_str(chromo) + '\n'
+    def fitness_calc(genes):
+        #print "Genes\n", genes
+        msg = Chromo.to_str(genes) + '\n'
         Chromo.sock.send( msg.encode() )
 
         fitness = Chromo.sock.recv(5000)
+        print 'fitness_calc:fitness ', fitness
         return float(fitness)
 
     @staticmethod
@@ -31,7 +33,7 @@ class Chromo(object):
                         a*ch2[i] + (1-a)*ch1[i]
                 ch1[i], ch2[i] = int(round(x)), int(round(y))
         elif cross == 1:
-            i = random.randint(1, len(ch1)-2)
+            i = random.randint(0, len(ch1))
             ch1[i:], ch2[i:] = ch2[i:], ch1[i:]
         elif cross == 2:
             i1 = random.randint(0, len(ch1))
@@ -56,8 +58,8 @@ class Chromo(object):
         return (0, ch)
 
     @staticmethod
-    def to_str(chromo):
-        return ','.join(str(gene) for gene in chromo[1])
+    def to_str(genes):
+        return ','.join(str(gene) for gene in genes)
 
 class Population(object):
     def __init__(self,
@@ -89,7 +91,7 @@ class Population(object):
 
     def evaluate(self):
         self.population = sorted(\
-                [ (Chromo.fitness_calc(ch), ch) for ch in self.population ],\
+                [ (Chromo.fitness_calc(ch[1]), ch[1]) for ch in self.population ],\
                 reverse = True)
 
         # Check if it has improved
@@ -104,15 +106,15 @@ class Population(object):
 
         # Imigration
         for i in range(int(self.imigration * self.size)):
-            next_pop.append(Chromo.generate_genes())
+            next_pop.append((0,Chromo.generate_genes()))
 
         # Crossover and mutation
-        while len(next_pop) < size:
+        while len(next_pop) < self.size:
             parents = self.select_parents()
             cross = random.random() < self.crossover
             childs = Chromo.crossover(parents) if cross else parents
             for ch in childs:
-                mutate = random.random() < self.mutate
+                mutate = random.random() < self.mutation
                 next_pop.append(Chromo.mutate(ch) if mutate else ch)
 
         # Save the next generation and evaluate each individual's fitness
