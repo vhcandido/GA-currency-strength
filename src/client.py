@@ -66,6 +66,7 @@ def main(filename=None, port=1010):
         send_msg(sock, 'NEWGEN\n')
         best = pop.evaluate()
         send_msg(sock, 'ENDGEN\n')
+        print 'main:current_best ', best
         #pop.plot_evolution()
 
         if not pop.improved:
@@ -81,9 +82,10 @@ def main(filename=None, port=1010):
         pop.evolve()
         print
 
-    print 'Best solution:'
+    print '\nBest solution:'
     #pop.show_first()
-    print best[0], Chromo.to_str(best)
+    print 'Fitness: ',best[0]
+    print 'Genes: ', Chromo.to_str(best[1]), '\''
 
     # Closing connection
     send_msg(sock, 'ENDGA\n')
