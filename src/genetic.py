@@ -10,12 +10,10 @@ class Chromo(object):
 
     @staticmethod
     def fitness_calc(genes):
-        #print "Genes\n", genes
         msg = Chromo.to_str(genes) + '\n'
         Chromo.sock.send( msg.encode() )
 
         fitness = Chromo.sock.recv(5000)
-        print 'fitness_calc:fitness ', fitness
         return float(fitness)
 
     @staticmethod
@@ -91,13 +89,16 @@ class Population(object):
         return [parent1, parent2]
 
     def evaluate(self):
-        sorted_pop = list()
+        eval_pop = list()
         for ch in self.population:
             if ch[2]:
-                sorted_pop.append( (Chromo.fitness_calc(ch[1]), ch[1], False) )
+                fitness = Chromo.fitness_calc(ch[1])
+                print "evaluate:new_fitness ", fitness
+                eval_pop.append( (fitness, ch[1], False) )
             else:
-                sorted_pop.append( ch )
-        sorted_pop = sorted(sorted_pop, reverse = True)
+                print 'evaluate:old_fitness ', ch[0]
+                eval_pop.append( ch )
+        self.population = sorted(eval_pop, reverse = True)
 
         # Check if it has improved
         new_best = self.population[0]
