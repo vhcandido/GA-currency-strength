@@ -42,7 +42,7 @@ class Chromo(object):
                 i1, i2 = i2, i1
             ch1[i1:i2], ch2[i1:i2] = ch2[i1:i2], ch1[i1:i2]
 
-        return [(0,ch1), (0,ch2)]
+        return [(0,ch1,True), (0,ch2,True)]
 
     @staticmethod
     def mutate(chromo):
@@ -55,7 +55,7 @@ class Chromo(object):
         for i in random.sample(range(l), int(l/4)):
             # Check if its within limits (6, 95)
             ch[i] += m if 5 < ch[i] < 96 else 0
-        return (0, ch)
+        return (0, ch, True)
 
     @staticmethod
     def to_str(genes):
@@ -76,7 +76,8 @@ class Population(object):
         self.elitism = elitism
         self.imigration = imigration
         self.tour_size = tour_size
-        self.population = [ (0.0, Chromo.generate_genes()) for i in range(size) ]
+        self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
+        self.population[0] = (0,[1,6,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3], True)
 
         self.improved = False
         self.cur_best = (-10000, None)
@@ -90,9 +91,13 @@ class Population(object):
         return [parent1, parent2]
 
     def evaluate(self):
-        self.population = sorted(\
-                [ (Chromo.fitness_calc(ch[1]), ch[1]) for ch in self.population ],\
-                reverse = True)
+        sorted_pop = list()
+        for ch in self.population:
+            if ch[2]:
+                sorted_pop.append( (Chromo.fitness_calc(ch[1]), ch[1], False) )
+            else:
+                sorted_pop.append( ch )
+        sorted_pop = sorted(sorted_pop, reverse = True)
 
         # Check if it has improved
         new_best = self.population[0]
@@ -102,11 +107,11 @@ class Population(object):
     def evolve(self):
         # Elitism
         idx = int(self.elitism * self.size)
-        next_pop = self.population[:idx]
+        next_pop = list(self.population[:idx])
 
         # Imigration
         for i in range(int(self.imigration * self.size)):
-            next_pop.append((0,Chromo.generate_genes()))
+            next_pop.append((0, Chromo.generate_genes(), True))
 
         # Crossover and mutation
         while len(next_pop) < self.size:
