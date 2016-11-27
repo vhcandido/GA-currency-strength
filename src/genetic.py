@@ -18,11 +18,42 @@ class Chromo(object):
 
     @staticmethod
     def crossover((parent1, parent2)):
-        return [parent1, parent2]
+        ch1, ch2 = parent1[1], parent2[1]
+
+        cross = random.randrange(3)
+        # 0 - linear combination
+        # 1 - one point
+        # 2 - two point
+        if cross == 0:
+            a = random.random()
+            for i in range(len(ch1)):
+                x, y  = a*ch1[i] + (1-a)*ch2[i],\
+                        a*ch2[i] + (1-a)*ch1[i]
+                ch1[i], ch2[i] = int(round(x)), int(round(y))
+        elif cross == 1:
+            i = random.randint(1, len(ch1)-2)
+            ch1[i:], ch2[i:] = ch2[i:], ch1[i:]
+        elif cross == 2:
+            i1 = random.randint(0, len(ch1))
+            i2 = random.randint(0, len(ch1))
+            if i1 > i2:
+                i1, i2 = i2, i1
+            ch1[i1:i2], ch2[i1:i2] = ch2[i1:i2], ch1[i1:i2]
+
+        return [(0,ch1), (0,ch2)]
 
     @staticmethod
     def mutate(chromo):
-        return chromo
+        # Sort mutation factor in (-5,5)
+        # Apply this mutation factor to randomly sampled genes
+        # These genes represent 25% (1/4) of total genes
+        ch = chromo[1]
+        l = len(ch)
+        m = random.randint(-5,5)
+        for i in random.sample(range(l), int(l/4)):
+            # Check if its within limits (6, 95)
+            ch[i] += m if 5 < ch[i] < 96 else 0
+        return (0, ch)
 
     @staticmethod
     def to_str(chromo):
