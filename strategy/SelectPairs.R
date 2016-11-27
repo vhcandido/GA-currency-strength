@@ -97,11 +97,13 @@ SP.2StrMat <- function( par=list() ){
 		c1 = substr(p,1,3)
 		c2 = substr(p,4,6)
 		### M3 filter ###
-		if( selectedPairs[p] > 0  &&  M3[c1,c2] != 2 ) {
+		if(is.na(M3[c1,c2])) {
 			toRemove = c(toRemove, p)
-		} else if( selectedPairs[p] < 0  &&  M3[c1,c2] != -2 ) {
+		} else if( selectedPairs[p] > 0  &  M3[c1,c2] != 2 ) {
 			toRemove = c(toRemove, p)
-		} else if( abs(M4[c1]) < min_strength[[c1]] && abs(M4[c2]) < min_strength[[c2]] ) {
+		} else if( selectedPairs[p] < 0  &  M3[c1,c2] != -2 ) {
+			toRemove = c(toRemove, p)
+		} else if( abs(M4[c1]) < min_strength[[c1]] & abs(M4[c2]) < min_strength[[c2]] ) {
 			### M4 filter ###
 			toRemove = c(toRemove, p)
 		}
