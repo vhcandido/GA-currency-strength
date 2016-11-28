@@ -118,10 +118,22 @@ class Population(object):
         while len(next_pop) < self.size:
             parents = self.select_parents()
             cross = random.random() < self.crossover
-            childs = Chromo.crossover(parents) if cross else parents
+            childs = parents
+            if cross:
+                print 'Crossing parents'
+                childs = Chromo.crossover(parents)
+            else:
+                print "Didn't crossover"
+                childs = parents
+
             for ch in childs:
                 mutate = random.random() < self.mutation
-                next_pop.append(Chromo.mutate(ch) if mutate else ch)
+                if mutate:
+                    print '\tChild mutation'
+                    ch = Chromo.mutate(ch)
+                else:
+                    print '\tNo child mutation'
+                next_pop.append(ch)
 
         # Save the next generation and evaluate each individual's fitness
         self.population = next_pop[:self.size]
