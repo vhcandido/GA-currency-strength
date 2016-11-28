@@ -200,7 +200,7 @@ pair_crosses <- function( x_, n_ma) {
 }
 
 carried_cross <- function(x_, n_ma=72) {
-	nn <- nrow(ev$quotes[[1]])
+	nn <- nrow(x_)
 	cr <- apply(pair_crosses(x_, n_ma), 2, function(x) {
 		p <- rep(NA, nn)
 		w <- which(x)
