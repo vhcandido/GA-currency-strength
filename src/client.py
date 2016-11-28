@@ -72,7 +72,7 @@ def main(filename=None, port=1010):
         if not pop.improved:
             no_improvements += 1
             print "Didn't improve:", no_improvements
-            if no_improvements == max_not_improved:
+            if no_improvements == params['max_not_improved']:
                 print 'Reached limit for not improved generations'
                 break
         else:
