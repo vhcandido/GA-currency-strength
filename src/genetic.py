@@ -1,3 +1,4 @@
+from copy import deepcopy
 import random
 
 class Chromo(object):
@@ -103,6 +104,7 @@ class Population(object):
         # Check if it has improved
         new_best = self.population[0]
         self.improved = new_best[0] > self.cur_best[0]
+        self.cur_best = new_best if self.improved else self.cur_best
         return new_best if self.improved else self.cur_best
 
     def evolve(self):
@@ -115,25 +117,30 @@ class Population(object):
             next_pop.append((0, Chromo.generate_genes(), True))
 
         # Crossover and mutation
+        print 'X\tM1\tM2'
         while len(next_pop) < self.size:
-            parents = self.select_parents()
+            # Deepcopy the parent tuple
+            # otherwise parents and childs will point to the same object (!)
+            parents = deepcopy(self.select_parents())
+            childs = ()
+
             cross = random.random() < self.crossover
-            childs = parents
             if cross:
-                print 'Crossing parents'
+                print 'Y',
                 childs = Chromo.crossover(parents)
             else:
-                print "Didn't crossover"
+                print 'N',
                 childs = parents
 
             for ch in childs:
                 mutate = random.random() < self.mutation
                 if mutate:
-                    print '\tChild mutation'
+                    print '\tY',
                     ch = Chromo.mutate(ch)
                 else:
-                    print '\tNo child mutation'
+                    print '\tN',
                 next_pop.append(ch)
+            print
 
         # Save the next generation and evaluate each individual's fitness
         self.population = next_pop[:self.size]
