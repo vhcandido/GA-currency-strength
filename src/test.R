@@ -16,6 +16,12 @@ chromo <- paste("1,6",
 		paste(rep(3,21), collapse = ','),
 		sep=',')
 
+# Read parameters from stdin
+param <- commandArgs(trailingOnly = TRUE)
+if(length(param) > 0) {
+	chromo <- param[1]
+}
+
 final.balance <- chromo.backtest(chromo, T)
 print('Final balance:')
 print(final.balance)
