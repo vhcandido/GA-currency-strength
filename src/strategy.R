@@ -89,8 +89,19 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	par <- append(par, as.list(genes))
 	names(par) <- par.names
 	
-	if(debug) { print(par) }
-	out <- tryCatch(
+	if(debug) {
+		out <-	backtest(strategy=S.2,
+							 par = par,
+							 dataInt = '2015-10-01::2015-10-10',
+							 #spread = 3,
+							 windowSize = 300,
+							 accBalance = 250.,
+							 orderRisk = risk[1],
+							 maxTotalRisk = risk[2],
+							 #logFile = 'Log.log',
+							 enable.output = F)
+	} else {
+		out <- tryCatch(
 				backtest(strategy=S.2,
 									par = par,
 									dataInt = '2015-10-01::2015-10-10',
@@ -103,6 +114,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 									enable.output = F),
 				warning = function(w) { cat('Warning: '); print(w); return(0.); },
 				error = function(e) { cat('Error: '); print(e); return(0.); })
+	}
 	
 	if(is.list(out)) {
 		final.balance = as.numeric(tail(out$balanceTS,1))
