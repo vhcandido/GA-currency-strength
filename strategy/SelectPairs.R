@@ -75,8 +75,8 @@ SP.2StrMat <- function( par=list() ){
 	min_strength = par$min_strength
 	
 	### first pairs selection ###
-	M1 <- SM.Sma(n_sma)
-	M2 <- SM.Fibo(ev$quotes,n_sma)
+	M1 <- retrieve_m(ev$M1)
+	M2 <- retrieve_m(ev$M2)
 	M3 <- M1 + M2
 	M4 <- rowSums(M3,na.rm=TRUE)
 	M4_diff = vapply(ev$pairs, function(p) M4[substr(p,1,3)] - M4[substr(p,4,6)], 0)

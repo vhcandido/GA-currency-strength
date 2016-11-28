@@ -94,8 +94,8 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	firstTime <- which(timeFull == timeSubset[1])
 	lastTime <- which(timeFull == tail(timeSubset, 1))
 	if(is.na(lastTime)){lastTime=length(timeFull)}
-	loadQuotes <- function(tt){
-		ev$quotes <- lapply(ev$pairs, function(p){ev$quotesTotal[[p]][(tt-windowSize+1):tt,]})
+	loadQuotes <- function(tt, ws){
+		ev$quotes <- lapply(ev$pairs, function(p){ ev$quotesTotal[[p]][(tt-ws+1):tt,] })
 		names( ev$quotes ) <- ev$pairs
 	}
 	
@@ -117,13 +117,17 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	balanceTS <- rep(NA, length(timeFull))
 	##############################
 
+	###### Computing M1 and M2 ######
+	loadQuotes(lastTime+10, (lastTime-firstTime+2*windowSize))
+	M1 <- func_close_ind_mat(ev$quotes, par[['SP.2StrMat.n_sma']])
+	M2 <- compute_m2(ev$quotes, M1, par[['SP.2StrMat.n_sma']])
 
 	##### main looping ############
 	if(enable.output) {cat('Starting the main loop!\n\n')}
 	tt <- firstTime
 	while(tt <= lastTime){
 		## Prepare Data and time ##
-		loadQuotes(tt)
+		loadQuotes(tt, windowSize)
 		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
