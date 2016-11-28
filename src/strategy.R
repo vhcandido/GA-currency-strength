@@ -95,6 +95,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 									par = par,
 									dataInt = '2015-10-01::2015-10-10',
 									#spread = 3,
+									windowSize = 300,
 									accBalance = 250.,
 									orderRisk = risk[1],
 									maxTotalRisk = risk[2],
