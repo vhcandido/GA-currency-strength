@@ -42,7 +42,6 @@ compute_m2 <- function(quotes, M1, n_ma) {
 	nn <- nrow(quotes[[1]])
 	M2 <- matrix(NA, nrow=nrow(M1), ncol=ncol(M1))
 	colnames(M2) <- names(M1)
-	
 	### looping for the pairs
 	aux = matrix(unlist(mclapply(X = ev$pairs,
 			FUN = function(p){
@@ -143,7 +142,7 @@ compute_m2 <- function(quotes, M1, n_ma) {
 ##########################################################
 SM.Fibo <- function(quotes, n_ma) {
 	# Add pair name or n_ma as parameter to func_sma
-	# With pair name we can also parametrize the moving average!
+	# TODO With pair name we can also parametrize the moving average!
 	M1 <- func_close_ind_mat(quotes, n_ma)
 	retrieve_m( tail(compute_m2(quotes,M1, n_ma), 1 ) )
 }
