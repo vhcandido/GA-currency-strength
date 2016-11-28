@@ -131,6 +131,8 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
+		ev$M1 <- M1[currentTime,]
+		ev$M2 <- M2[currentTime,]
 		###########################
 		
 		#### Send New Orders ######
