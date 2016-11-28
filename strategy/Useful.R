@@ -175,7 +175,7 @@ next_U_turn_idx <- function(p, begin_idx=1, low=TRUE){
 }
 
 carried_U <- function(x, backward=TRUE) {
-	nn <- nrow(ev$quotes[[1]])
+	nn <- nrow(x)
 	U <- matrix(NA, nrow=nn, ncol=2)
 	colnames(U) <- c('Bottom', 'Top')
 	
