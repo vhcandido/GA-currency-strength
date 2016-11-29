@@ -24,6 +24,8 @@ class Chromo(object):
 
         if Chromo.cross_op == -1:
             cross = random.randrange(3)
+        else:
+            cross = Chromo.cross_op
         # 0 - linear combination
         # 1 - one point
         # 2 - two point
