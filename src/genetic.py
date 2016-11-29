@@ -77,8 +77,11 @@ class Population(object):
         self.elitism = elitism
         self.imigration = imigration
         self.tour_size = tour_size
-        self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
-        if local:
+
+        if not local:
+            self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
+        else:
+            self.population = [ Chromo.mutate((0, deepcopy(local), True)) for i in range(size) ]
             self.population[0] = (0, local, True)
 
         self.improved = False
