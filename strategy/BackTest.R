@@ -59,6 +59,11 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 				accBalance=250, orderRisk=0.01, maxTotalRisk=0.06,
 				logFile=NULL, enable.output=T){
 	
+	# If order_risk is greater than max_total_risk it won't open any orders
+	if(orderRisk > maxTotalRisk) {
+		cat("Can't open any order (orderRisk is greater than maxTotalRisk)\n");
+		return(accBalance); }
+
 	### check if exists pairs ######
 	if(is.null(pairs)){		
 		pairs <- ev$pairsTotal 
