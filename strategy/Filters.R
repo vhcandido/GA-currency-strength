@@ -54,14 +54,23 @@ F.StochRsi <- function(pairsVec, par=list()){
 	toRemove = numeric(0)
 	for(p in names(pairsVec)){
 		rsi = RSI(ev$quotes[[p]][,'Close'], nrsi[[p]])
-		stochRsi = as.numeric( tail( stoch( rsi, nFastK[[p]], nFastD[[p]], nSlowD[[p]] )[,'fastD'] , 2) )
+		stochRsi <- tryCatch(
+			as.numeric( tail( stoch( rsi, nFastK[[p]], nFastD[[p]], nSlowD[[p]] )[,'fastD'] , 2) ),
+			error = function(e) {
+				cat('Error -> ')
+				print(e)
+				toRemove = c(toRemove, p)
+				return(NA)
+			}
+		)
+		if(any(is.na(stochRsi))) { next; }
 		
 		if(pairsVec[p] > 0){ ## Buy
 		  if(!(stochRsi[2] < 0.2 || (stochRsi[2] < 0.7 &&  stochRsi[2] - stochRsi[1] > 0.01) ))
-			toRemove = c(toRemove, p)
+				toRemove = c(toRemove, p)
 		}else{  ## Sell
 		  if(!(stochRsi[2] > 0.8 || (stochRsi[2] > 0.3 && stochRsi[2] - stochRsi[1] < -0.01) ))
-		    toRemove = c(toRemove, p)
+				toRemove = c(toRemove, p)
 		}
 	}
 	
