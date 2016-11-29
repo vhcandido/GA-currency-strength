@@ -55,8 +55,8 @@ class Chromo(object):
         # These genes represent 25% (1/4) of total genes
         ch = chromo[1]
         l = len(ch)
-        m = random.randint(-5,5)
         for i in random.sample(range(l), int(l/4)):
+            m = random.randint(-5,5)
             # Check if its within limits [1, 100]
             ch[i] += m if 1 <= ch[i]+m <= 100 else 0
         return (0, ch, True)
