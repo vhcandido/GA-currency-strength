@@ -42,6 +42,7 @@ def main(filename=None, port=1010):
 
     sock = util.open_socket(int(port))
     Chromo.sock = sock
+    Chromo.cross_op = params['cross_op']
 
     # Generations without improvements
     no_improv = 0

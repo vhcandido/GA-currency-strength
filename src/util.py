@@ -8,6 +8,9 @@ def parse_json(filename):
     if not 'local' in data:
         data['local'] = None
 
+    if not 'cross_op' in data:
+        data['cross_op'] = -1
+
     return data
 
 

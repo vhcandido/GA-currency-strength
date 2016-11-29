@@ -3,6 +3,7 @@ import random
 
 class Chromo(object):
     conn = None
+    cross_op = -1
     @staticmethod
     def generate_genes(size = None):
         if not size:
@@ -21,11 +22,12 @@ class Chromo(object):
     def crossover((parent1, parent2)):
         ch1, ch2 = parent1[1], parent2[1]
 
-        #cross = random.randrange(3)
-        cross = 0
+        if Chromo.cross_op == -1:
+            cross = random.randrange(3)
         # 0 - linear combination
         # 1 - one point
         # 2 - two point
+        print cross,
         if cross == 0:
             a = random.random()
             for i in range(len(ch1)):
@@ -53,8 +55,8 @@ class Chromo(object):
         l = len(ch)
         m = random.randint(-5,5)
         for i in random.sample(range(l), int(l/4)):
-            # Check if its within limits (6, 95)
-            ch[i] += m if 5 < ch[i] < 96 else 0
+            # Check if its within limits [1, 100]
+            ch[i] += m if 1 <= ch[i]+m <= 100 else 0
         return (0, ch, True)
 
     @staticmethod
@@ -79,8 +81,10 @@ class Population(object):
         self.tour_size = tour_size
 
         if not local:
+            print 'Creating population randomly'
             self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
         else:
+            print 'Creating population based on local search'
             self.population = [ Chromo.mutate((0, deepcopy(local), True)) for i in range(size) ]
             self.population[0] = (0, local, True)
 
