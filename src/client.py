@@ -9,24 +9,9 @@
 # +===========================================================================+
 
 from genetic import Population, Chromo
-import socket
 import sys
-import json
+import util
 
-def parse_json(filename):
-    with open(filename) as data_file:
-        data = json.load(data_file)
-    return data
-
-
-def send_msg(sock, msg):
-        #totalsent = 0
-        #while totalsent < MSGLEN:
-        #    sent = self.sock.send(msg[totalsent:])
-        #    if sent == 0:
-        #        raise RuntimeError("socket connection broken")
-        #    totalsent = totalsent + sent
-        sock.send( msg.encode() )
 
 def main(filename=None, port=1010):
     if not filename:
@@ -43,7 +28,7 @@ def main(filename=None, port=1010):
                 }
     else:
         print 'Loading parameters from %s' % (filename)
-        params = parse_json(filename)
+        params = util.parse_json(filename)
 
     # Creating initial population
     pop = Population( size = params['size'],
@@ -53,8 +38,7 @@ def main(filename=None, port=1010):
             imigration = params['imigration'],
             tour_size = params['tour_size'])
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("localhost", int(port)))
+    sock = util.open_socket(int(port))
     Chromo.sock = sock
 
     # Generations without improvements
@@ -63,9 +47,9 @@ def main(filename=None, port=1010):
         print 'Generation %d' % (i+1)
 
         print 'Calculating fitness'
-        send_msg(sock, 'NEWGEN\n')
+        util.send_msg(sock, 'NEWGEN\n')
         best = pop.evaluate()
-        send_msg(sock, 'ENDGEN\n')
+        util.send_msg(sock, 'ENDGEN\n')
         print 'main:current_best ', best
         #pop.plot_evolution()
 
@@ -88,7 +72,7 @@ def main(filename=None, port=1010):
     print 'Genes: ', Chromo.to_str(best[1]), '\''
 
     # Closing connection
-    send_msg(sock, 'ENDGA\n')
+    util.send_msg(sock, 'ENDGA\n')
     sock.close()
 
 if __name__ == '__main__':
