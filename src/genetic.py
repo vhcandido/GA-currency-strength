@@ -131,12 +131,18 @@ class Population(object):
         for i in range(imi):
             next_pop.append((0, Chromo.generate_genes(), True))
 
-        # Crossover and mutation
-        print 'X\tM1\tM2'
-        while len(next_pop) < self.size:
+        # Selection
+        par_list = list()
+        print 'Selecting parents'
+        while 2*len(par_list) < self.size:
             # Deepcopy the parent tuple
             # otherwise parents and childs will point to the same object (!)
             parents = deepcopy(self.select_parents())
+            par_list.append(parents)
+
+        # Crossover and mutation
+        print 'X\tM1\tM2'
+        for parents in par_list:
             childs = ()
 
             cross = random.random() < self.crossover
