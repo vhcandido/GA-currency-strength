@@ -25,9 +25,13 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	genes <- as.numeric(unlist(strsplit(chromo, ',')))
 	
 	# Taking the first 2 -> orderRisk and maxTotalRisk
-	# \in [1,10]
-	risk <- (genes[c(1,2)] %% 10) / 100
-	risk[which(risk==0)] <- 10
+	# \in [1,5] and [1,10], respectively
+	risk <- genes[c(1,2)]
+	risk[1] <- risk[1] %% 5
+	if(risk[1] == 0) { risk[1] <- 5 }
+	risk[2] <- risk[2] %% 10
+	if(risk[2] == 0) { risk[2] <- 10 }
+	risk <- risk / 100
 	genes <- genes[-c(1,2)] # remove from genes
 	
 	# Taking the next 21 -> UOO.1.pips_until_SL
@@ -90,16 +94,18 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	names(par) <- par.names
 	
 	if(debug) {
+		cat('Risk: ', risk, '\n')
+		print(par)
 		out <-	backtest(strategy=S.2,
 							 par = par,
 							 dataInt = '2015-10-01::2015-10-10',
 							 #spread = 3,
 							 windowSize = 300,
-							 accBalance = 250.,
+							 accBalance = 10000.,
 							 orderRisk = risk[1],
 							 maxTotalRisk = risk[2],
 							 #logFile = 'Log.log',
-							 enable.output = F)
+							 enable.output = T)
 	} else {
 		out <- tryCatch(
 				backtest(strategy=S.2,
@@ -107,7 +113,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 									dataInt = '2015-10-01::2015-10-10',
 									#spread = 3,
 									windowSize = 300,
-									accBalance = 250.,
+									accBalance = 10000.,
 									orderRisk = risk[1],
 									maxTotalRisk = risk[2],
 									#logFile = 'Log.log',
