@@ -1,0 +1,11 @@
+
+{
+    "max_generations": 100,
+    "max_not_improved": 10,
+    "size": 100,
+    "crossover": 0.7,
+    "mutation": 0.01,
+    "elitism": 0.01,
+    "imigration": 0.0,
+    "tour_size" : 2
+}
