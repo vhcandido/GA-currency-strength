@@ -21,7 +21,8 @@ class Chromo(object):
     def crossover((parent1, parent2)):
         ch1, ch2 = parent1[1], parent2[1]
 
-        cross = random.randrange(3)
+        #cross = random.randrange(3)
+        cross = 0
         # 0 - linear combination
         # 1 - one point
         # 2 - two point
@@ -67,7 +68,8 @@ class Population(object):
             mutation = 0.05,
             elitism = 0.2,
             imigration = 0.2,
-            tour_size = 8):
+            tour_size = 8,
+            local = None):
 
         self.size = size
         self.crossover = crossover
@@ -76,7 +78,8 @@ class Population(object):
         self.imigration = imigration
         self.tour_size = tour_size
         self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
-        self.population[0] = (0,[1,6,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3], True)
+        if local:
+            self.population[0] = (0, local, True)
 
         self.improved = False
         self.cur_best = (-10000, None)

@@ -24,10 +24,11 @@ def main(filename=None, port=1010):
                 'mutation': 0.05,
                 'elitism': 0.2,
                 'imigration': 0.2,
-                'tour_size' : 8,
+                'tour_size': 8,
+                'local': None
                 }
     else:
-        print 'Loading parameters from %s' % (filename)
+        print 'Loading parameters from %s\n' % (filename)
         params = util.parse_json(filename)
 
     # Creating initial population
@@ -36,7 +37,8 @@ def main(filename=None, port=1010):
             mutation = params['mutation'],
             elitism = params['elitism'],
             imigration = params['imigration'],
-            tour_size = params['tour_size'])
+            tour_size = params['tour_size'],
+            local = params['local'])
 
     sock = util.open_socket(int(port))
     Chromo.sock = sock

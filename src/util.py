@@ -4,6 +4,10 @@ import json
 def parse_json(filename):
     with open(filename) as data_file:
         data = json.load(data_file)
+
+    if not 'local' in data:
+        data['local'] = None
+
     return data
 
 
