@@ -112,11 +112,14 @@ class Population(object):
 
     def evolve(self):
         # Elitism
-        idx = int(self.elitism * self.size)
-        next_pop = list(self.population[:idx])
+        eli = int(self.elitism * self.size)
+        print 'Elitism - saving %d chromo' % (eli)
+        next_pop = list(self.population[:eli])
 
         # Imigration
-        for i in range(int(self.imigration * self.size)):
+        imi = int(self.imigration * self.size)
+        print 'Imigration - importing %d chromo' % (imi)
+        for i in range(imi):
             next_pop.append((0, Chromo.generate_genes(), True))
 
         # Crossover and mutation
