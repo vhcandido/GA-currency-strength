@@ -25,7 +25,9 @@ RM.1 <- function(openOrders, accBalance, spread, orderRisk, maxTotalRisk, pairsV
 	
 	cont = 1
 	for(p in names(pairsVec)){
-		if(expo >= maxTotalRisk*accBalance){break;} # risk test
+		cash_risk <- accBalance * orderRisk
+		# Check if after opening this order we won't surpass our total risk limit
+		if(expo + cash_risk > maxTotalRisk*accBalance){ break; } # risk test
 		if(p %in% openOrders[,'Pair']){next;} # do not accept two open orders in the same pair
 		
 		exchange_rate <- ev$quotes[[p]][[nn,'Close']] ## Estimative
@@ -49,7 +51,6 @@ RM.1 <- function(openOrders, accBalance, spread, orderRisk, maxTotalRisk, pairsV
 		# Computing the value (in USD) of a pip variation for 1 lot (100k units)
 		qc <- pair_pip_to_USD(p)
 		# Lot size according to orderRisk
-		cash_risk <- round( accBalance * orderRisk, 2)
 		lot_size = cash_risk / (pips_until_SL * qc) 
 		
 		#round(lot_size, 2)
