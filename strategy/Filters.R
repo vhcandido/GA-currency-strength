@@ -53,16 +53,7 @@ F.StochRsi <- function(pairsVec, par=list()){
 	
 	toRemove = numeric(0)
 	for(p in names(pairsVec)){
-		rsi = RSI(ev$quotes[[p]][,'Close'], nrsi[[p]])
-		stochRsi <- tryCatch(
-			as.numeric( tail( stoch( rsi, nFastK[[p]], nFastD[[p]], nSlowD[[p]] )[,'fastD'] , 2) ),
-			error = function(e) {
-				cat('Error -> ')
-				print(e)
-				toRemove = c(toRemove, p)
-				return(NA)
-			}
-		)
+		stochRsi = as.numeric(ev$stochRSI[,p])
 		if(any(is.na(stochRsi))) { next; }
 		
 		if(pairsVec[p] > 0){ ## Buy
