@@ -130,6 +130,7 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	###### Computing stochastic RSI ######
 	stochRSI <- xts(matrix(unlist(lapply(ev$pairs, function(p) {
 		rsi <- RSI(ev$quotes[[p]][,'Close'], par[['F.StochRsi.nrsi']][[p]])
+		rsi[which(is.nan(rsi))] <- 50
 		stoch( rsi,
 			 par[['F.StochRsi.nFastK']][[p]],
 			 par[['F.StochRsi.nFastD']][[p]],
