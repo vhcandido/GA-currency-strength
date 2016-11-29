@@ -1,4 +1,4 @@
-# BASELINE 261.17 with 250
+# BASELINE  261.17 (actually 232.98 bc of rsi > 0.01) with 250
 # '-> 10408.29 with 10k
 
 # 339.75
