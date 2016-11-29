@@ -127,17 +127,29 @@ backtest <- function(strategy=S.0, par=list(), dataInt='2015-10-01::2015-10-02',
 	M1 <- func_close_ind_mat(ev$quotes, par[['SP.2StrMat.n_sma']])
 	M2 <- compute_m2(ev$quotes, M1, par[['SP.2StrMat.n_sma']])
 
+	###### Computing stochastic RSI ######
+	stochRSI <- xts(matrix(unlist(lapply(ev$pairs, function(p) {
+		rsi <- RSI(ev$quotes[[p]][,'Close'], par[['F.StochRsi.nrsi']][[p]])
+		stoch( rsi,
+			 par[['F.StochRsi.nFastK']][[p]],
+			 par[['F.StochRsi.nFastD']][[p]],
+			 par[['F.StochRsi.nSlowD']][[p]] )[,'fastD']
+	})), ncol = 21), order.by = as.POSIXct(time(M1)))
+	names(stochRSI) <- ev$pairs
+
 	##### main looping ############
 	if(enable.output) {cat('Starting the main loop!\n\n')}
 	tt <- firstTime
 	while(tt <= lastTime){
 		## Prepare Data and time ##
 		loadQuotes(tt, windowSize)
+		previousTime = as.POSIXct(timeFull[[tt-1]])
 		currentTime = as.POSIXct(timeFull[[tt]])
 		currentTimeStr = toString( currentTime )
 		currentIdBase = format(currentTime, "%Y%m%d%H%M")
 		ev$M1 <- M1[currentTime,]
 		ev$M2 <- M2[currentTime,]
+		ev$stochRSI <- stochRSI[c(previousTime, currentTime),]
 		###########################
 		
 		#### Send New Orders ######
