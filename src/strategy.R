@@ -119,7 +119,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 									#logFile = 'Log.log',
 									enable.output = F),
 				warning = function(w) { cat('Warning: '); print(w); return(0.); },
-				error = function(e) { cat('Error: '); print(e); return(0.); })
+				error = function(e) { cat('Error: '); print(e); print(chromo); return(0.); })
 	}
 	
 	if(is.list(out)) {
