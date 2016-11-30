@@ -151,6 +151,15 @@ class Population(object):
         self.cur_best = new_best if self.improved else self.cur_best
         return new_best if self.improved else self.cur_best
 
+    def selection(self):
+        par_list = list()
+        while 2*len(par_list) < self.size:
+            # Deepcopy the parent tuple
+            # otherwise parents and childs will point to the same object (!)
+            parents = deepcopy(self.select_parents())
+            par_list.append(parents)
+        return par_list
+
     def evolve(self):
         # Elitism
         eli = int(self.elitism * self.size)
@@ -164,13 +173,7 @@ class Population(object):
             next_pop.append((0, Chromo.generate_genes(), True))
 
         # Selection
-        par_list = list()
-        print 'Selecting parents'
-        while 2*len(par_list) < self.size:
-            # Deepcopy the parent tuple
-            # otherwise parents and childs will point to the same object (!)
-            parents = deepcopy(self.select_parents())
-            par_list.append(parents)
+        par_list = self.selection()
 
         # Crossover and mutation
         print 'X\tM1\tM2'
