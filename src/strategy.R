@@ -7,10 +7,11 @@ cat('Ready to run\n\n')
 name.genes <- function(par, genes, names, n, max = 0, allow0 = T) {
 	g <- genes[c(1:n)]
 	if(max != 0) {
-		g <- g %% max
+		g <- (g-1) / (100/max)
 		if(!allow0) {
-			g[which(g==0)] <- max
+			g <- g+1
 		}
+		g <- floor(g)
 	}
 	params <- as.list(g)
 	names(params) <- names
@@ -25,13 +26,11 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	genes <- as.numeric(unlist(strsplit(chromo, ',')))
 	
 	# Taking the first 2 -> orderRisk and maxTotalRisk
-	# \in [1,5] and [1,10], respectively
+	# \in [0.01,0.05] and [0.01,0.10], respectively
 	risk <- genes[c(1,2)]
-	risk[1] <- risk[1] %% 5
-	if(risk[1] == 0) { risk[1] <- 5 }
-	risk[2] <- risk[2] %% 10
-	if(risk[2] == 0) { risk[2] <- 10 }
-	risk <- risk / 100
+	risk[1] <- (risk[1] - 1) / 20
+	risk[2] <- (risk[2] - 1) / 10
+	risk <- (floor(risk) + 1) / 100
 	genes <- genes[-c(1,2)] # remove from genes
 	
 	# Taking the next 21 -> UOO.1.pips_until_SL
