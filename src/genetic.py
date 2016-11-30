@@ -4,11 +4,42 @@ import random
 class Chromo(object):
     conn = None
     cross_op = -1
+    minv = list()
+    maxv = list()
+
     @staticmethod
     def generate_genes(size = None):
         if not size:
             size = 21*11 + 7 + 2
-        return [ random.randint(1,100) for i in range(size) ]
+        return [ random.randint(Chromo.minv[i],Chromo.maxv[i]) for i in range(size) ]
+
+    @staticmethod
+    def set_intervals():
+        for i in range(size):
+            min_, max_ = Chromo.get_intervals(i)
+            Chromo.minv.append(min_)
+            Chromo.maxv.append(max_)
+
+    @staticmethod
+    def get_intervals(gpos):
+        maxv = 100
+        minv = 1
+        if gpos == 0:
+            maxv = 5
+        elif gpos == 1:
+            maxv = 10
+        elif 44 <= gpos < 65:
+            # [2*21 + 2, 3*21 + 2)
+            minv = 0
+            maxv = 23
+        elif 65 <= gpos < 72:
+            #
+            minv = 0
+            maxv = 11
+        elif 219 <= gpos < 240:
+            maxv = 5
+
+        return (minv, maxv)
 
     @staticmethod
     def fitness_calc(genes):
@@ -58,7 +89,7 @@ class Chromo(object):
         for i in random.sample(range(l), int(l/4)):
             m = random.randint(-5,5)
             # Check if its within limits [1, 100]
-            ch[i] += m if 1 <= ch[i]+m <= 100 else 0
+            ch[i] += m if Chromo.minv[i] <= ch[i]+m <= Chromo.maxv[i] else 0
         return (0, ch, True)
 
     @staticmethod
@@ -81,6 +112,9 @@ class Population(object):
         self.elitism = elitism
         self.imigration = imigration
         self.tour_size = tour_size
+
+        # Create lists with intervals for each gene
+        Chromo.set_intervals()
 
         if not local:
             print 'Creating population randomly'
