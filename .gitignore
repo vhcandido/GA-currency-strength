@@ -6,4 +6,4 @@
 *.pyc
 
 # IPython notebook metadata
-*.ipynb_checkpoints/*
+*.ipynb_checkpoints*
