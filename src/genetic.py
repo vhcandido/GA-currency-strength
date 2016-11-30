@@ -8,13 +8,11 @@ class Chromo(object):
     maxv = list()
 
     @staticmethod
-    def generate_genes(size = None):
-        if not size:
-            size = 21*11 + 7 + 2
+    def generate_genes(size = 240):
         return [ random.randint(Chromo.minv[i],Chromo.maxv[i]) for i in range(size) ]
 
     @staticmethod
-    def set_intervals():
+    def set_intervals(size = 240):
         for i in range(size):
             min_, max_ = Chromo.get_intervals(i)
             Chromo.minv.append(min_)
