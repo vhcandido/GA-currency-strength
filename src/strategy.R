@@ -18,17 +18,8 @@ name.genes <- function(par, genes, names, n, max = 0, allow0 = T) {
 	return(append(par, list(params)))
 }
 
-chromo.backtest <- function(chromo, debug=FALSE) {
-	if(debug) { cat(chromo, '\n'); }
+parse.genes <- function(genes) {
 	par <- list()
-	
-	# Chromosome splitted into its genes
-	genes <- as.numeric(unlist(strsplit(chromo, ',')))
-	
-	# Taking the first 2 -> orderRisk and maxTotalRisk
-	# \in [0.01,0.05] and [0.01,0.10], respectively
-	risk <- genes[c(1,2)] / 100
-	genes <- genes[-c(1,2)] # remove from genes
 	
 	# Taking the next 21 -> UOO.1.pips_until_SL
 	par <- name.genes(par, genes, ev$pairsTotal, 21)
@@ -84,10 +75,26 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 		'F.StochRsi.nSlowD',# = 3,
 		'RM.1.n_pips_to_Uturn',# = 15,
 		'RM.1.tp_by_sl'# = 3
-		)
+	)
 	# Append the remaining genes and name the list
 	par <- append(par, as.list(genes))
 	names(par) <- par.names
+	
+	return(par)
+}
+
+chromo.backtest <- function(chromo, debug=FALSE) {
+	if(debug) { cat(chromo, '\n'); }
+	
+	# Chromosome splitted into its genes
+	genes <- as.numeric(unlist(strsplit(chromo, ',')))
+	
+	# Taking the first 2 -> orderRisk and maxTotalRisk
+	# \in [0.01,0.05] and [0.01,0.10], respectively
+	risk <- genes[c(1,2)] / 100
+	genes <- genes[-c(1,2)] # remove from genes
+	
+	par <- parse.genes(genes)
 	
 	if(debug) {
 		cat('Risk: ', risk, '\n')
@@ -100,7 +107,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 							 accBalance = 10000.,
 							 orderRisk = risk[1],
 							 maxTotalRisk = risk[2],
-							 #logFile = 'Log.log',
+							 logFile = 'log.log',
 							 enable.output = T)
 	} else {
 		out <- tryCatch(
