@@ -27,10 +27,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	
 	# Taking the first 2 -> orderRisk and maxTotalRisk
 	# \in [0.01,0.05] and [0.01,0.10], respectively
-	risk <- genes[c(1,2)]
-	risk[1] <- (risk[1] - 1) / 20
-	risk[2] <- (risk[2] - 1) / 10
-	risk <- (floor(risk) + 1) / 100
+	risk <- genes[c(1,2)] / 100
 	genes <- genes[-c(1,2)] # remove from genes
 	
 	# Taking the next 21 -> UOO.1.pips_until_SL
@@ -43,12 +40,12 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	
 	# Taking the next 21 -> SP.2StrMat.min_diff
 	# \in [0, 24)
-	par <- name.genes(par, genes, ev$pairsTotal, 21, max=24, allow0=T)
+	par <- name.genes(par, genes, ev$pairsTotal, 21)
 	genes <- genes[-c(1:21)] # remove from genes
 	
 	# Taking the next 7 -> SP.2StrMat.min_strength
 	# \in [0, 12)
-	par <- name.genes(par, genes, ev$currencies, 7, max=12, allow0=T)
+	par <- name.genes(par, genes, ev$currencies, 7)
 	genes <- genes[-c(1:7)] # remove from genes
 	
 	# Taking the next 21 -> F.Sma for:
@@ -71,7 +68,7 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	
 	# Taking the next 21 -> RM.1.tp_by_sl
 	# \in [1,5]
-	par <- name.genes(par, genes, ev$pairsTotal, 21, max=5, allow0=F)
+	par <- name.genes(par, genes, ev$pairsTotal, 21)
 	genes <- genes[-c(1:21)] # remove from genes
 	
 	par.names = c(
