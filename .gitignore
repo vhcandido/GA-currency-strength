@@ -17,6 +17,11 @@
 *.idx
 *.log
 *.ps
+#
+*.nav
+*.out
+*.snm
+*.toc
 
 # Ignore swap files
 *.swp
