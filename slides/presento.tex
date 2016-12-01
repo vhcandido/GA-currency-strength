@@ -36,12 +36,33 @@
 \begin{document}
 
 
-\AtBeginSection[]
-{
-	\begin{frame}{Content}
-	\tableofcontents[currentsection,subsectionstyle=hide,subsubsectionstyle=hide]
-	\end{frame}
+%\AtBeginSection[]
+%{
+%	\begin{frame}{Outline}
+%	\tableofcontents[currentsection,subsectionstyle=hide,subsubsectionstyle=hide]
+%	\end{frame}
+%}
+
+%\AtBeginSubsection[
+%	{\frame<beamer>{\frametitle{Outline}   
+%	\tableofcontents[currentsubsection]}}%
+%]%
+%{
+%  \frame<beamer>{ 
+%    \frametitle{Outline}   
+%    \tableofcontents[currentsubsection]}
+%}
+\AtBeginSubsection[]{
+\begin{frame}<beamer>
+	\frametitle{Outline}
+%\tableofcontents[currentsection,sectionstyle=hide/hide/hide/show/hide,currentsubsection=hide/hide/hide/show/hide,subsubsectionstyle=hide]
+	\tableofcontents[
+	currentsection,
+	sectionstyle=show/show,
+	subsectionstyle=show/shaded/hide]
+\end{frame}
 }
+
 
 \maketitle
 
@@ -90,7 +111,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 \end{array}
 \end{equation*}
 
-	Example of RSI\citep{WilderJr1978} with 14 periods:
+	Example of RSI \citep{WilderJr1978} with 14 periods:
 	\begin{figure}[H]
 	\centering
 	%\includegraphics[page=2,width=0.8\textwidth]{images/chart_RSI_AUDCAD.pdf}
@@ -107,7 +128,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 \end{array}
 \end{equation*}
 
-	Example of Stochastic Oscilator\citep{Lane1984} with $n_K=14, n_D=3$ periods:
+	Example of Stochastic Oscilator \citep{Lane1984} with $n_K=14, n_D=3$ periods:
 	\begin{figure}[H]
 	\centering
 	%\includegraphics[page=2,width=0.8\textwidth]{images/chart_stoch_AUDCAD.pdf}
@@ -152,6 +173,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 \end{frame}
 
 \section{Currency Strength Strategy}
+\subsection{Currencies}
 \begin{frame}{Currency Strength Strategy}
 	Based on the strength of the following currencies and the 21 currency pairs resulting of their combination
 
@@ -227,7 +249,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 \begin{minipage}{1.3\linewidth}
 
 \begin{algorithm}[H]
-	\caption{Genetic Algorithm Structure\citep{Gaspar2012}}
+	\caption{Genetic Algorithm Structure \citep{Gaspar2012}}
 \begin{algorithmic}[1]
 	\State $t \leftarrow 0$
 	\State Generate initial population $P(t)$
@@ -268,6 +290,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 \end{frame}
 
 \section{Results}
+\subsection{1000 chromosomes}
 \begin{frame}{Results -- First generation 1000 chromosomes}
 	\begin{figure}[h]
 	\centering
@@ -282,6 +305,8 @@ RS & = & \frac{AvgUp}{AvgDn}
 	\end{figure}
 \end{frame}
 
+%%%%%%%%%%%%
+\subsection{100 chromosomes}
 \begin{frame}{Results -- First generation 100 chromosomes}
 	\begin{figure}[h]
 	\centering
@@ -303,7 +328,7 @@ RS & = & \frac{AvgUp}{AvgDn}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Results -- Selection, crossover, mutation and selection}
+\begin{frame}{Results -- Crossover, mutation and selection}
 	\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\columnwidth]{images/01r_100_cr_mut_sel.pdf}
@@ -331,6 +356,57 @@ RS & = & \frac{AvgUp}{AvgDn}
 	\end{figure}
 \end{frame}
 
+
+%%%%%%%%%%%%
+\subsection{100 chromosomes with seed}
+\begin{frame}{Results -- First generation 100 chromosomes around seed}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/01l_100.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- Selection}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/01l_100_sel1.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- Selection, crossover and mutation}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/01l_100_cr_mut.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- Crossover, mutation and selection}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/01l_100_cr_mut_sel.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- 10th generation}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/10l_100.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- 20th generation}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/20l_100.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results -- 30th generation}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{images/30l_100.pdf}
+	\end{figure}
+\end{frame}
 %
 %
 %
