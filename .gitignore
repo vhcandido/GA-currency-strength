@@ -7,3 +7,16 @@
 
 # IPython notebook metadata
 *.ipynb_checkpoints*
+
+# Ignore files created by pdflatex
+*.aux
+*.bbl
+*.blg
+*.brf
+*.dvi
+*.idx
+*.log
+*.ps
+
+# Ignore swap files
+*.swp
