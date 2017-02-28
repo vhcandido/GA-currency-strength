@@ -43,7 +43,7 @@ fi
 gnome-terminal -e "bash -ic 'Rscript server.R $port; exec bash'"
 
 # Wait for R server to load required libraries
-sleep 5
+sleep 7
 
 # Execute the Python client (Genetic Algorithm)
 # with population parameters taken from a file passed as argument
