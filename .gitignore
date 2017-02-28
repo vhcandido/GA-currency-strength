@@ -25,3 +25,6 @@
 
 # Ignore swap files
 *.swp
+
+# Ignore slides made by Delbem
+6elbce.odp
