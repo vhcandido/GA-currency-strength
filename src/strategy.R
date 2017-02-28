@@ -95,13 +95,14 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 	genes <- genes[-c(1,2)] # remove from genes
 	
 	par <- parse.genes(genes)
+	dateInt <- '2015-10-01::2016-08'
 	
 	if(debug) {
 		cat('Risk: ', risk, '\n')
 		print(par)
 		out <-	backtest(strategy=S.2,
 							 par = par,
-							 dataInt = '2015-10-01::2015-10-10',
+							 dataInt = dateInt,
 							 #spread = 3,
 							 windowSize = 300,
 							 accBalance = 10000.,
@@ -113,7 +114,8 @@ chromo.backtest <- function(chromo, debug=FALSE) {
 		out <- tryCatch(
 				backtest(strategy=S.2,
 									par = par,
-									dataInt = '2015-10-01::2015-10-10',
+									#dataInt = '2015-01-01::2015-04-01',
+									dataInt = dateInt,
 									#spread = 3,
 									windowSize = 300,
 									accBalance = 10000.,
