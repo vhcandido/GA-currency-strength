@@ -1,5 +1,8 @@
 from copy import deepcopy
 import random
+from Queue import Queue
+from threading import Thread
+from multiprocessing import Process, Array
 
 class Chromo(object):
     conn = None
@@ -39,17 +42,29 @@ class Chromo(object):
 
         return (minv, maxv)
 
-    @staticmethod
-    def fitness_calc(genes):
-        msg = Chromo.to_str(genes) + '\n'
-        Chromo.sock.send( msg.encode() )
 
-        fitness = Chromo.sock.recv(5000)
+    @staticmethod
+    def fitness_helper(genes, sock):
+        msg = Chromo.to_str(genes) + '\n'
+        sock.send( msg.encode() )
+
+        fitness = sock.recv(5000)
         return float(fitness)
 
     @staticmethod
+    def fitness_calc(sock, queue, fitness):
+        print 'Thread started...'
+        while not queue.empty():
+            i, genes = queue.get()
+            fit = Chromo.fitness_helper(genes, sock)
+            print 'fitness_calc: [%d, %f]' % (i, fit)
+            fitness[i] = fit
+            queue.task_done()
+        print 'Thread finishing...'
+
+    @staticmethod
     def crossover((parent1, parent2)):
-        ch1, ch2 = parent1[1], parent2[1]
+        ch1, ch2 = parent1, parent2
 
         if Chromo.cross_op == -1:
             cross = random.randrange(3)
@@ -75,20 +90,20 @@ class Chromo(object):
                 i1, i2 = i2, i1
             ch1[i1:i2], ch2[i1:i2] = ch2[i1:i2], ch1[i1:i2]
 
-        return [(0,ch1,True), (0,ch2,True)]
+        return [ch1, ch2]
 
     @staticmethod
-    def mutate(chromo):
+    def mutate(ch):
         # Sort mutation factor in (-5,5)
         # Apply this mutation factor to randomly sampled genes
         # These genes represent 25% (1/4) of total genes
-        ch = chromo[1]
         l = len(ch)
         for i in random.sample(range(l), int(l/10)):
             m = random.randint(-5,5)
             # Check if its within limits [1, 100]
-            ch[i] += m if Chromo.minv[i] <= ch[i]+m <= Chromo.maxv[i] else 0
-        return (0, ch, True)
+            ch[i] = max(Chromo.minv[i], min(Chromo.maxv[i], ch[i] + m))
+            #ch[i] += m if Chromo.minv[i] <= ch[i]+m <= Chromo.maxv[i] else 0
+        return ch
 
     @staticmethod
     def to_str(genes):
@@ -110,17 +125,19 @@ class Population(object):
         self.elitism = elitism
         self.imigration = imigration
         self.tour_size = tour_size
+        self.fitness = [0.0] * size
+        self.chromo_history = {-1:None}
 
         # Create lists with intervals for each gene
         Chromo.set_intervals()
 
         if not local:
             print 'Creating population randomly'
-            self.population = [ (0.0, Chromo.generate_genes(), True) for i in range(size) ]
+            self.population = [ Chromo.generate_genes() for i in range(size) ]
         else:
             print 'Creating population based on local search'
-            self.population = [ Chromo.mutate((0, deepcopy(local), True)) for i in range(size) ]
-            self.population[0] = (0, local, True)
+            self.population = [ Chromo.mutate(deepcopy(local)) for i in range(size) ]
+            self.population[0] = local
 
         self.improved = False
         self.cur_best = (-10000, None)
@@ -134,22 +151,43 @@ class Population(object):
         return [parent1, parent2]
 
     def evaluate(self):
-        eval_pop = list()
-        for ch in self.population:
-            if ch[2]:
-                fitness = Chromo.fitness_calc(ch[1])
-                print "evaluate:new_fitness ", fitness
-                eval_pop.append( (fitness, ch[1], False) )
+        q = Queue()
+        a = Array('d', [0.0] * self.size)
+        for i,ch in enumerate(self.population):
+            ch_str = Chromo.to_str(ch)
+            if ch_str in self.chromo_history:
+                fit = self.chromo_history[ch_str]
+                a[i] = fit
+                print 'evaluate:old_fitness:%d %f' % (i,fit)
             else:
-                print 'evaluate:old_fitness ', ch[0]
-                eval_pop.append( ch )
-        self.population = sorted(eval_pop, reverse = True)
+                print 'evaluate:adding_to_queue:%d' % i
+                q.put((i, self.population[i]))
+        threads = []
+        for sock in Chromo.sockets:
+            t = Thread(target=Chromo.fitness_calc, args=(sock, q, a))
+            t.daemon = True
+            t.start()
+            threads.append(t)
+        # Wait for threads to finish
+        for t in threads:
+            t.join()
+
+        self.fitness = list(a)
+        sorted_idx = sorted(range(self.size), key=lambda i: self.fitness[i], reverse=True)
+        self.fitness = [self.fitness[i] for i in sorted_idx]
+        self.population = [self.population[i] for i in sorted_idx]
+
+        # Adding chromosomes to history
+        for i, ch in enumerate(self.population):
+            ch_str = Chromo.to_str(ch)
+            if ch_str not in self.chromo_history:
+                self.chromo_history[ch_str] = self.fitness[i]
 
         # Check if it has improved
-        new_best = self.population[0]
-        self.improved = new_best[0] > self.cur_best[0]
-        self.cur_best = new_best if self.improved else self.cur_best
-        return new_best if self.improved else self.cur_best
+        best_candidate = (self.fitness[0], self.population[0])
+        self.improved = best_candidate[0] > self.cur_best[0]
+        self.cur_best = best_candidate if self.improved else self.cur_best
+        return self.cur_best
 
     def selection(self):
         par_list = list()
@@ -170,7 +208,7 @@ class Population(object):
         imi = int(self.imigration * self.size)
         print 'Imigration - importing %d chromo' % (imi)
         for i in range(imi):
-            next_pop.append((0, Chromo.generate_genes(), True))
+            next_pop.append(Chromo.generate_genes())
 
         # Selection
         par_list = self.selection()

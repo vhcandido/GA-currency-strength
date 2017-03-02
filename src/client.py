@@ -13,7 +13,7 @@ import sys
 import util
 
 
-def main(filename=None, port=1010):
+def main(filename=None, ports=[5000]):
     if not filename:
         print 'Using default parameters'
         params = {
@@ -40,8 +40,12 @@ def main(filename=None, port=1010):
             tour_size = params['tour_size'],
             local = params['local'])
 
-    sock = util.open_socket(int(port))
-    Chromo.sock = sock
+    sockets = []
+    for port in ports:
+        sock = util.open_socket(int(port))
+        sockets.append(sock)
+    Chromo.sockets = sockets
+
     Chromo.cross_op = params['cross_op']
 
     # Generations without improvements
@@ -50,9 +54,11 @@ def main(filename=None, port=1010):
         print 'Generation %d' % (i+1)
 
         print 'Calculating fitness'
-        util.send_msg(sock, 'NEWGEN\n')
+        for sock in Chromo.sockets:
+            util.send_msg(sock, 'NEWGEN\n')
         best = pop.evaluate()
-        util.send_msg(sock, 'ENDGEN\n')
+        for sock in Chromo.sockets:
+            util.send_msg(sock, 'ENDGEN\n')
         print 'main:current_best ', best
         #pop.plot_evolution()
 
@@ -75,12 +81,13 @@ def main(filename=None, port=1010):
     print 'Genes: ', Chromo.to_str(best[1]), '\''
 
     # Closing connection
-    util.send_msg(sock, 'ENDGA\n')
-    sock.close()
+    for sock in Chromo.sockets:
+        util.send_msg(sock, 'ENDGA\n')
+        sock.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 2:
-        main(sys.argv[1], sys.argv[2])
+        main(sys.argv[1], sys.argv[2:])
     else:
         print("\nInput file and comunication port were expected.\nExiting...\n")
         exit(1)
