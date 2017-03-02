@@ -26,4 +26,5 @@ def send_msg(sock, msg):
 def open_socket(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(('localhost', port))
+    print '[+] New connection at localhost:%d' % port
     return sock
