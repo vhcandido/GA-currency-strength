@@ -34,17 +34,24 @@ file=$1
 
 # Define comunication port
 if [ $# -lt 2 ]; then
-	port=1010
+	ports=(5000)
 else
-	port=$2
+	ports=()
+	for i in $(seq 2 $#)
+	do
+		ports+=(${!i})
+	done
 fi
 
-# Open R server (chromosome backtest)
-gnome-terminal -e "bash -ic 'Rscript server.R $port; exec bash'"
+for port in ${ports[@]}
+do
+	# Open R server (chromosome backtest)
+	gnome-terminal -e "bash -ic 'Rscript server.R $port; exec bash'"
+done
 
 # Wait for R server to load required libraries
-sleep 7
+sleep 10
 
 # Execute the Python client (Genetic Algorithm)
 # with population parameters taken from a file passed as argument
-python client.py $file $port
+python client.py $file ${ports[@]}
