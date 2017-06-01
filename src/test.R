@@ -22,7 +22,8 @@ if(length(param) > 0) {
 	chromo <- param[1]
 }
 
-final.balance <- chromo.backtest(chromo, T)
+out <- chromo.backtest(chromo, T)
+final.balance = as.numeric(tail(out$balanceTS,1))
 print('Final balance:')
 print(final.balance)
 
