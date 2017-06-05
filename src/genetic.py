@@ -90,7 +90,7 @@ class Chromo(object):
                 i1, i2 = i2, i1
             ch1[i1:i2], ch2[i1:i2] = ch2[i1:i2], ch1[i1:i2]
 
-        return [ch1, ch2]
+        return (ch1, ch2)
 
     @staticmethod
     def mutate(ch):
@@ -143,12 +143,16 @@ class Population(object):
         self.cur_best = (-10000, None)
 
     def tournament_selection(self):
-        return max(random.sample(self.population, self.tour_size))
+        # Sample the index of the tournament candidates
+        candidates = random.sample(range(self.size), self.tour_size)
+
+        # Return the index of the best candidate
+        return max(candidates, key = lambda i: self.fitness[i])
 
     def select_parents(self):
-        parent1 = self.tournament_selection()
-        parent2 = self.tournament_selection()
-        return [parent1, parent2]
+        parent1 = self.population[self.tournament_selection()]
+        parent2 = self.population[self.tournament_selection()]
+        return (parent1, parent2)
 
     def evaluate(self):
         q = Queue()
